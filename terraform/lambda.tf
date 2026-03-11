@@ -9,7 +9,7 @@ locals {
   }
   layers = {
     "twilio" = {
-      source_dir  = "../layers/twilio/python"
+      source_dir  = "../layers/twilio/"
       output_path = "../layers/twilio/twilio.zip"
     },
   }
@@ -45,7 +45,7 @@ resource "aws_lambda_function" "lambdas" {
 
   function_name    = each.key
   role             = aws_iam_role.ai_automation_lambda_role.arn
-  handler          = "${each.key}.${each.key}"
+  handler          = "${each.key}.lambda_handler"
   runtime          = "python3.12"
   filename         = data.archive_file.lambda_archives[each.key].output_path
   source_code_hash = data.archive_file.lambda_archives[each.key].output_base64sha256
@@ -85,6 +85,16 @@ resource "aws_lambda_permission" "allow_public_invoke" {
   function_name          = each.value.function_name
   principal              = "*"
   function_url_auth_type = "NONE"
+}
+
+# Allow public invoke function
+resource "aws_lambda_permission" "allow_public_invoke_function" {
+  for_each = aws_lambda_function.lambdas
+
+  statement_id  = "AllowPublicInvoke-${each.key}"
+  action        = "lambda:InvokeFunction"
+  function_name = each.value.function_name
+  principal     = "*"
 }
 
 # Output Lambda function URLs
