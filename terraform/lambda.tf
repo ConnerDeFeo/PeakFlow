@@ -70,6 +70,17 @@ resource "aws_lambda_function_url" "lambda_urls" {
   authorization_type = "NONE"
 }
 
+# Allow public invoke of lambda function URLs
+resource "aws_lambda_permission" "allow_public_invoke" {
+  for_each = aws_lambda_function.lambdas
+
+  statement_id           = "AllowPublicAccess-${each.key}"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = each.value.function_name
+  principal              = "*"
+  function_url_auth_type = "NONE"
+}
+
 # Output Lambda function URLs
 output "lambda_function_urls" {
   value = { for key, lambda in aws_lambda_function_url.lambda_urls : key => lambda.function_url }
