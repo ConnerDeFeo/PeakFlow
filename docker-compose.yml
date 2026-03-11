@@ -1,0 +1,10 @@
+#Installs twilio for amazon linux
+#docker compose -f docker-compose-dependencies.yml up -d
+services:
+  aws-linux:
+    image: public.ecr.aws/lambda/python:3.12
+    container_name: aws-linux-runtime
+    volumes:
+      - ./layers/twilio/python:/var/task/layers/twilio/python
+    entrypoint: ""
+    command: sh -c "pip install twilio -t /var/task/layers/twilio/python"

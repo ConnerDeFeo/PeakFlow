@@ -68,6 +68,12 @@ resource "aws_lambda_function_url" "lambda_urls" {
 
   function_name = each.value.function_name
   authorization_type = "NONE"
+
+  cors {
+    allow_origins = ["*"]
+    allow_methods = ["POST", "GET"]
+    allow_headers = ["*"]
+  }
 }
 
 # Allow public invoke of lambda function URLs
