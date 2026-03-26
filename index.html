@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PeakFlow Demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #0f0f0f;
+      color: #ffffff;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .eyebrow {
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 1rem;
+    }
+
+    .headline {
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      color: #ccc;
+      max-width: 480px;
+      line-height: 1.5;
+      margin-bottom: 2.5rem;
+    }
+
+    .phone {
+      font-size: clamp(2.8rem, 10vw, 5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      text-decoration: none;
+      border-bottom: 3px solid #4f8ef7;
+      padding-bottom: 0.15em;
+      transition: color 0.2s;
+    }
+
+    .phone:hover { color: #4f8ef7; }
+
+    .cta-note {
+      margin-top: 1.25rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .disclaimer {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: #444;
+      max-width: 420px;
+      line-height: 1.6;
+    }
+
+    .links {
+      margin-top: 3.5rem;
+      display: flex;
+      gap: 2rem;
+      font-size: 0.8rem;
+    }
+
+    .links a {
+      color: #555;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .links a:hover { color: #aaa; }
+  </style>
+</head>
+<body>
+
+  <p class="eyebrow">AI-Powered SMS Demo</p>
+
+  <p class="headline">
+    Call the number below and our AI agent will text you back instantly.
+  </p>
+
+  <a class="phone" href="tel:+13158733743">315-873-3743</a>
+
+  <p class="cta-note">Give it a call &mdash; your phone will receive an automated reply within seconds.</p>
+
+  <p class="disclaimer">By calling this number, you agree to receive an automated SMS reply. Message and data rates may apply. Reply STOP to opt out.</p>
+
+  <nav class="links">
+    <a href="https://gist.github.com/ConnerDeFeo/aac1cb2362b9dd1876b81a935cc402de" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+    <a href="https://gist.github.com/ConnerDeFeo/50209f9eede5a01456978fedccd6f9a0" target="_blank" rel="noopener noreferrer">Terms &amp; Conditions</a>
+  </nav>
+
+</body>
+</html>

@@ -5,7 +5,17 @@ locals {
       source_dir  = "../lambdas/AutoSMSReply"
       output_path = "../lambdas/zips/AutoSMSReply.zip"
       layers      = ["twilio"]
-    }
+    },
+    "AskForConsent" = {
+      source_dir  = "../lambdas/AskForConsent"
+      output_path = "../lambdas/zips/AskForConsent.zip"
+      layers      = ["twilio"]
+    },
+    "ConsentAnswer" = {
+      source_dir  = "../lambdas/ConsentAnswer"
+      output_path = "../lambdas/zips/ConsentAnswer.zip"
+      layers      = ["twilio"]
+    },
   }
   layers = {
     "twilio" = {
