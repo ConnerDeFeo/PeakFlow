@@ -36,9 +36,8 @@ def incoming_call():
     )
     conversationrelay.language(
         code="en-US",
-        tts_provider="amazon",
-        voice="Joanna-Neural",
-        transcription_provider="deepgram"
+        tts_provider="ElevenLabs",
+        voice="NYC9WEgkq1u4jiqBseQ9-turbo_v2_5-0.8_0.8_0.6",
     )
     connect.append(conversationrelay)
     response.append(connect)
