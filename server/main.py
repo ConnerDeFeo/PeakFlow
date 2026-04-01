@@ -34,7 +34,7 @@ def incoming_call():
     connect.conversation_relay(
         url="wss://receptionist.connerdefeo.com/ws",
         tts_provider="Amazon",
-        voice="Polly.Joanna-Nueral",
+        voice="Polly.Joanna-Neural",
         transcription_provider="Deepgram",
         welcome_greeting="Hi, thanks for calling! How can I help you today?"
     )
