@@ -33,13 +33,11 @@ def incoming_call():
     connect = Connect()
     connect.conversation_relay(
         url="wss://receptionist.connerdefeo.com/ws",
-        tts_provider="Amazon",
-        voice="Polly.Joanna-Neural",
-        transcription_provider="Deepgram",
         welcome_greeting="Hi, thanks for calling! How can I help you today?"
     )
     response.append(connect)
     return Response(content=str(response), media_type="application/xml")
+
 @app.websocket("/ws")
 async def websocket_handler(websocket: WebSocket):
     await websocket.accept()
