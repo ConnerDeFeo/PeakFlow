@@ -89,9 +89,8 @@ async def websocket_handler(websocket: WebSocket):
                 history.append({"role": "user", "content": user_text})
                 logger.debug("Appended user message to history (total: %d)", len(history))
 
-                # Call Claude
-                logger.debug("Invoking Bedrock model for callSid: %s", call_sid)
-                response = bedrock.invoke_model(
+                # Stream the response
+                response = bedrock.invoke_model_with_response_stream(
                     modelId="us.anthropic.claude-haiku-4-5-20251001-v1:0",
                     contentType="application/json",
                     accept="application/json",
@@ -102,27 +101,37 @@ async def websocket_handler(websocket: WebSocket):
                         "messages": history
                     })
                 )
-                result = json.loads(response["body"].read())
-                reply = result["content"][0]["text"]
-                logger.debug("Bedrock reply: %r", reply)
 
-                history.append({"role": "assistant", "content": reply})
+                full_reply = ""
+                for bedrock_event in response["body"]:
+                    chunk = json.loads(bedrock_event["chunk"]["bytes"])
+                    if chunk["type"] == "content_block_delta":
+                        token = chunk["delta"].get("text", "")
+                        if token:
+                            full_reply += token
+                            await websocket.send_text(json.dumps({
+                                "type": "text",
+                                "token": token,
+                                "last": False
+                            }))
+
+                # Send final token
+                await websocket.send_text(json.dumps({
+                    "type": "text",
+                    "token": "",
+                    "last": True
+                }))
+
+                print(f"Bedrock reply: '{full_reply}'")
 
                 # Save history
-                logger.debug("Saving history to DynamoDB (total: %d messages)", len(history))
+                history.append({"role": "assistant", "content": full_reply})
+                print(f"Saving history to DynamoDB (total: {len(history)} messages)")
                 table.put_item(Item={
                     "call_sid": call_sid,
                     "history": history,
                     "expires_at": int(time.time()) + 3600
                 })
-
-                # Send reply back to ConversationRelay
-                logger.debug("Sending text reply to ConversationRelay")
-                await websocket.send_text(json.dumps({
-                    "type": "text",
-                    "token": reply,
-                    "last": True
-                }))
 
             elif event == "stop":
                 logger.info("Stop event received for callSid: %s", call_sid)
