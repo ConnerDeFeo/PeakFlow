@@ -28,15 +28,15 @@ def health():
 
 @app.post("/incoming-call")
 def incoming_call():
-    response = VoiceResponse()
-    connect = Connect()
-    connect.conversation_relay(
-        url="wss://receptionist.connerdefeo.com/ws",
-        welcome_greeting="Hi, thanks for calling! How can I help you today?",
-        voice="Polly.Joanna-Neural"
-    )
-    response.append(connect)
-    return Response(content=str(response), media_type="application/xml")
+    xml_response = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <Response>
+        <Connect>
+            <ConversationRelay url="wss://receptionist.connerdefeo.com/ws" welcomeGreeting="Hi, thanks for calling! How can I help you today?" voice="Polly.Joanna" />
+        </Connect>
+        </Response>
+    """
+    return Response(content=xml_response, media_type="text/xml")
 
 @app.websocket("/ws")
 async def websocket_handler(websocket: WebSocket):
