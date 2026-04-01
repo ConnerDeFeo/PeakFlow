@@ -2,7 +2,7 @@ import json
 import boto3
 import time
 import logging
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, Response
 from twilio.twiml.voice_response import ConversationRelay, VoiceResponse, Connect
 
 logging.basicConfig(
@@ -31,17 +31,19 @@ def incoming_call():
     response = VoiceResponse()
     connect = Connect()
     conversationrelay = ConversationRelay(
-        url='wss://receptionist.connerdefeo.com/ws')
+        url="wss://receptionist.connerdefeo.com/ws",
+        welcome_greeting="Hi, thanks for calling! How can I help you today?"
+    )
     conversationrelay.language(
-        code='sv-SE',
-        tts_provider='amazon',
-        voice='Elin-Neural',
-        transcription_provider='google',
-        speech_model='long')
-    conversationrelay.language(
-        code='en-US', tts_provider='google', voice='en-US-Journey-O')
+        code="en-US",
+        tts_provider="amazon",
+        voice="Joanna-Neural",
+        transcription_provider="deepgram",
+        speech_model="long"
+    )
     connect.append(conversationrelay)
     response.append(connect)
+    return Response(content=str(response), media_type="application/xml")
 
 @app.websocket("/ws")
 async def websocket_handler(websocket: WebSocket):
