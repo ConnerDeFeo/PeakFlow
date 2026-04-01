@@ -38,8 +38,7 @@ def incoming_call():
         code="en-US",
         tts_provider="amazon",
         voice="Joanna-Neural",
-        transcription_provider="deepgram",
-        speech_model="long"
+        transcription_provider="deepgram"
     )
     connect.append(conversationrelay)
     response.append(connect)
