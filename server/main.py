@@ -22,6 +22,9 @@ Keep responses short and conversational — you are speaking out loud, not writi
 Never use bullet points, lists, or special characters.
 Always end with a question to keep the conversation going."""
 
+logging.getLogger("botocore").setLevel(logging.WARNING)
+logging.getLogger("boto3").setLevel(logging.WARNING)
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
@@ -46,7 +49,6 @@ def incoming_call():
 @app.websocket("/ws")
 async def websocket_handler(websocket: WebSocket):
     await websocket.accept()
-    logger.debug("WebSocket connection accepted from %s", websocket.client)
     call_sid = None
     history = []
 
@@ -54,27 +56,21 @@ async def websocket_handler(websocket: WebSocket):
         async for message in websocket.iter_text():
             data = json.loads(message)
             event = data.get("type")
-            logger.debug("Received event: %s | raw: %s", event, message)
 
             if event == "setup":
                 call_sid = data.get("callSid")
-                logger.info("Call started — callSid: %s", call_sid)
                 # Load existing history if any
                 resp = table.get_item(Key={"call_sid": call_sid})
                 history = resp.get("Item", {}).get("history", [])
-                logger.debug("Loaded %d history message(s) from DynamoDB for callSid: %s", len(history), call_sid)
 
             elif event == "prompt":
                 user_text = data.get("voicePrompt", "")
-                logger.debug("Prompt received — voicePrompt: %r", user_text)
                 if not user_text:
-                    logger.debug("Empty voicePrompt, skipping")
                     continue
                     
                 # Check for goodbye before calling Claude
                 goodbye_words = ["goodbye", "bye", "hang up", "that's all", "thank you bye"]
                 if any(word in user_text.lower() for word in goodbye_words):
-                    logger.info("Goodbye detected in prompt, ending call")
                     await websocket.send_text(json.dumps({
                         "type": "text",
                         "token": "Thanks for calling, have a great day!",
@@ -87,7 +83,6 @@ async def websocket_handler(websocket: WebSocket):
                     break
 
                 history.append({"role": "user", "content": user_text})
-                logger.debug("Appended user message to history (total: %d)", len(history))
 
                 # Stream the response
                 response = bedrock.invoke_model_with_response_stream(
@@ -134,16 +129,11 @@ async def websocket_handler(websocket: WebSocket):
                 })
 
             elif event == "stop":
-                logger.info("Stop event received for callSid: %s", call_sid)
                 break
-
-            else:
-                logger.debug("Unhandled event type: %s", event)
 
     except Exception as e:
         logger.exception("Unhandled error in websocket_handler: %s", e)
     finally:
-        logger.debug("Closing WebSocket for callSid: %s", call_sid)
         try:
             await websocket.close()
         except RuntimeError:
