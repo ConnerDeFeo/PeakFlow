@@ -4,6 +4,7 @@ import time
 import logging
 from fastapi import FastAPI, WebSocket, Response
 from twilio.twiml.voice_response import ConversationRelay, VoiceResponse, Connect
+import asyncio
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -76,6 +77,7 @@ async def websocket_handler(websocket: WebSocket):
                         "token": "Thanks for calling, have a great day!",
                         "last": True
                     }))
+                    await asyncio.sleep(3)  # give Twilio time to speak the goodbye
                     # Tell Twilio to end the call
                     await websocket.send_text(json.dumps({
                         "type": "end"
