@@ -37,7 +37,7 @@ def incoming_call():
     conversationrelay.language(
         code="en-US",
         tts_provider="ElevenLabs",
-        voice="NYC9WEgkq1u4jiqBseQ9-turbo_v2_5-0.8_0.8_0.6",
+        voice="7EzWGsX10sAS4c9m9cPf",
     )
     connect.append(conversationrelay)
     response.append(connect)
