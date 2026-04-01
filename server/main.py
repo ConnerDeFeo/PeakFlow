@@ -34,7 +34,7 @@ def incoming_call():
     connect.conversation_relay(
         url="wss://receptionist.connerdefeo.com/ws",
         tts_provider="Amazon",
-        voice="Polly.Joanna-Generative",
+        voice="Polly.Joanna-Nueral",
         transcription_provider="Deepgram",
         welcome_greeting="Hi, thanks for calling! How can I help you today?"
     )
@@ -50,11 +50,11 @@ async def websocket_handler(websocket: WebSocket):
     try:
         async for message in websocket.iter_text():
             data = json.loads(message)
-            event = data.get("event")
+            event = data.get("type")
             logger.debug("Received event: %s | raw: %s", event, message)
 
-            if event == "start":
-                call_sid = data["start"]["callSid"]
+            if event == "setup":
+                call_sid = data.get("callSid")
                 logger.info("Call started — callSid: %s", call_sid)
                 # Load existing history if any
                 resp = table.get_item(Key={"call_sid": call_sid})
