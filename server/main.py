@@ -1,7 +1,7 @@
 import json
 import boto3
 import time
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, Response, WebSocket
 from twilio.twiml.voice_response import VoiceResponse, Connect
 
 app = FastAPI()
@@ -26,14 +26,13 @@ def incoming_call():
     connect = Connect()
     connect.conversation_relay(
         url="wss://receptionist.connerdefeo.com/ws",
-        tts_provider="Amazon Polly",
+        tts_provider="Amazon",
         voice="Polly.Joanna-Generative",
         transcription_provider="Deepgram",
         welcome_greeting="Hi, thanks for calling! How can I help you today?"
     )
     response.append(connect)
-    return str(response)
-
+    return Response(content=str(response), media_type="application/xml")
 @app.websocket("/ws")
 async def websocket_handler(websocket: WebSocket):
     await websocket.accept()
@@ -55,6 +54,20 @@ async def websocket_handler(websocket: WebSocket):
                 user_text = data.get("voicePrompt", "")
                 if not user_text:
                     continue
+                    
+                # Check for goodbye before calling Claude
+                goodbye_words = ["goodbye", "bye", "hang up", "that's all", "thank you bye"]
+                if any(word in user_text.lower() for word in goodbye_words):
+                    await websocket.send_text(json.dumps({
+                        "type": "text",
+                        "token": "Thanks for calling, have a great day!",
+                        "last": True
+                    }))
+                    # Tell Twilio to end the call
+                    await websocket.send_text(json.dumps({
+                        "type": "end"
+                    }))
+                    break
 
                 history.append({"role": "user", "content": user_text})
 
