@@ -17,11 +17,10 @@ dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
 table = dynamodb.Table("twilio_conversations")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 
-SYSTEM_PROMPT = """You are a friendly receptionist for a roofing company. 
+SYSTEM_PROMPT = """You are a friendly demo receptionist. People are calling you to talk, have a chat with them. 
 Keep responses short and conversational — you are speaking out loud, not writing.
 Never use bullet points, lists, or special characters.
-Always end with a question to keep the conversation going.
-If someone wants to book an appointment or get a quote, collect their name and phone number."""
+Always end with a question to keep the conversation going."""
 
 @app.get("/health")
 def health():
@@ -33,7 +32,8 @@ def incoming_call():
     connect = Connect()
     connect.conversation_relay(
         url="wss://receptionist.connerdefeo.com/ws",
-        welcome_greeting="Hi, thanks for calling! How can I help you today?"
+        welcome_greeting="Hi, thanks for calling! How can I help you today?",
+        voice="Polly.Joanna-Neural"
     )
     response.append(connect)
     return Response(content=str(response), media_type="application/xml")
