@@ -108,4 +108,7 @@ async def websocket_handler(websocket: WebSocket):
     except Exception as e:
         print(f"Error: {e}")
     finally:
-        await websocket.close()
+        try:
+            await websocket.close()
+        except RuntimeError:
+            pass
