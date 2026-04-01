@@ -13,6 +13,45 @@ resource "aws_iam_role" "ai_automation_lambda_role" {
     }]
   })
 }
+
+# Allow Bedrock model invocation
+resource "aws_iam_role_policy" "bedrock_policy" {
+  name = "bedrock-access"
+  role = aws_iam_role.ai_automation_lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "bedrock:InvokeModel",
+        "bedrock:InvokeModelWithResponseStream"
+      ]
+      Resource = "*"
+    }]
+  })
+}
+
+# Allow DynamoDB access
+resource "aws_iam_role_policy" "dynamodb_policy" {
+  name = "dynamodb-access"
+  role = aws_iam_role.ai_automation_lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem"
+      ]
+      Resource = aws_dynamodb_table.twilio_conversations.arn
+    }]
+  })
+}
+
+
 # Basic execution permissions
 resource "aws_iam_role_policy_attachment" "lambda_basic" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"

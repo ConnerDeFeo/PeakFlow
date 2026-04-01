@@ -16,6 +16,12 @@ locals {
       output_path = "../lambdas/zips/ConsentAnswer.zip"
       layers      = ["twilio"]
     },
+    "Receptionist" = {
+      source_dir  = "../lambdas/Receptionist"
+      output_path = "../lambdas/zips/Receptionist.zip"
+      layers      = ["twilio"]
+    }
+
   }
   layers = {
     "twilio" = {
@@ -66,6 +72,7 @@ resource "aws_lambda_function" "lambdas" {
     variables = {
       TWILIO_ACCOUNT_SID = var.twilio_account_sid
       TWILIO_AUTH_TOKEN  = var.twilio_auth_token
+      RECEPTIONIST_LAMBDA_URL = var.receptionist_lambda_url
     }
   }
 

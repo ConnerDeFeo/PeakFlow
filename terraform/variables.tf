@@ -9,3 +9,9 @@ variable "twilio_auth_token" {
   type        = string
   sensitive   = true
 }
+
+variable "receptionist_lambda_url"{
+  description = "Receptionist lambda enpoint"
+  type        = string
+  sensitive   = true
+}
