@@ -208,7 +208,7 @@ async def websocket_handler(websocket: WebSocket):
                     logger.info("Appointment booked — ending call.")
                     # Estimate speaking time: ~180 words per minute, minimum 5 seconds
                     word_count = len(spoken.split())
-                    speak_time = max(5, (word_count / 180) * 60)
+                    speak_time = max(5, (word_count / 160) * 60)
                     await asyncio.sleep(speak_time)
                     await websocket.send_text(json.dumps({"type": "end"}))
                     break
