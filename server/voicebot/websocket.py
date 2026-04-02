@@ -4,7 +4,7 @@ import asyncio
 from fastapi import APIRouter, WebSocket
 from config import DEFAULT_APPOINTMENT_DATA
 from extraction.dynamo import get_conversation_history, save_conversation, get_appointment_data
-from bedrock import stream_conversation, run_extraction
+from server.voicebot.bedrock import stream_conversation, run_extraction
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
