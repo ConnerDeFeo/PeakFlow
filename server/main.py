@@ -169,12 +169,12 @@ async def websocket_handler(websocket: WebSocket):
                     parsed = json.loads(raw_text)
                     spoken = parsed.get("message", "Sorry, I didn't catch that. Could you repeat?")
                     updated_data = parsed.get("data", appointment_data)
-                    appointment_booked = updated_data["appointment_booked"] = parsed.get("appointment_booked", False)
+                    appointment_booked = parsed.get("appointment_booked", False)
                 except (json.JSONDecodeError, KeyError) as e:
                     logger.error(f"Failed to parse Bedrock JSON response: {e}")
                     spoken = "Sorry, I had a little trouble there. Could you say that again?"
                     updated_data = appointment_data
-                    appointment_booked = updated_data["appointment_booked"] = parsed.get("appointment_booked", False)
+                    appointment_booked = parsed.get("appointment_booked", False)
 
                 logger.info(f"Ron says: {spoken}")
 
@@ -206,9 +206,9 @@ async def websocket_handler(websocket: WebSocket):
 
                 if appointment_booked:
                     logger.info("Appointment booked — ending call.")
-                    # Estimate speaking time: ~150 words per minute, minimum 5 seconds
+                    # Estimate speaking time: ~180 words per minute, minimum 5 seconds
                     word_count = len(spoken.split())
-                    speak_time = max(5, (word_count / 150) * 60)
+                    speak_time = max(5, (word_count / 180) * 60)
                     await asyncio.sleep(speak_time)
                     await websocket.send_text(json.dumps({"type": "end"}))
                     break
