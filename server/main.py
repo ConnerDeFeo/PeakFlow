@@ -27,30 +27,23 @@ DEFAULT_APPOINTMENT_DATA = {
     "appointment_date": None,
     "homeowners_present": None,
     "attic_access": None,
-    "roof_age": None,
-    "appointment_booked": False
+    "roof_age": None
 }
 
 logging.getLogger("botocore").setLevel(logging.WARNING)
 logging.getLogger("boto3").setLevel(logging.WARNING)
 
-
-@app.get("/health")
-def health():
-    return {"status": "ok"}
-
-
 def get_system_prompt(current_data):
     return f"""
         CRITICAL INSTRUCTION: You must ALWAYS respond with raw JSON only. No exceptions. No plain text. No markdown. No code fences. 
         Your entire response must be a single valid JSON object in this exact format:
-        {{"message": "spoken response here", "data": {{"first_name": null, ...}}}}
+        {{"message": "spoken response here", "data": {{"first_name": null, ...}}, "appointment_booked": boolean}}
 
         Important rules for the JSON:
         - Always include all fields in "data", even ones you have not collected yet (use null).
         - Carry forward any values already collected — never reset a field that already has a value.
         - The "message" field is what will be spoken aloud. Never include asterisks, markdown, bullet points, or special characters in the message.
-        - appointment_booked should only be true once all fields are filled and the customer has confirmed.
+        - appointment_booked should only be true once all data fields are filled and the customer has confirmed.
 
         You are a friendly roofing receptionist named Ron for Rochester Pro Roofing.
         You are collecting information to book a roofing inspection appointment.
@@ -134,17 +127,6 @@ async def websocket_handler(websocket: WebSocket):
                     if "Item" in appt_resp:
                         appointment_data = appt_resp["Item"]
 
-                # If already booked, just say goodbye and hang up
-                if appointment_data.get("appointment_booked"):
-                    await websocket.send_text(json.dumps({
-                        "type": "text",
-                        "token": "Your appointment is booked. Thanks for calling Rochester Pro Roofing, have a great day!",
-                        "last": True
-                    }))
-                    await asyncio.sleep(3)
-                    await websocket.send_text(json.dumps({"type": "end"}))
-                    break
-
                 # Add user message to history
                 history.append({"role": "user", "content": user_text})
 
@@ -155,7 +137,7 @@ async def websocket_handler(websocket: WebSocket):
                     accept="application/json",
                     body=json.dumps({
                         "anthropic_version": "bedrock-2023-05-31",
-                        "max_tokens": 400,
+                        "max_tokens": 300,
                         "system": get_system_prompt(appointment_data),
                         "messages": history
                     })
@@ -176,10 +158,12 @@ async def websocket_handler(websocket: WebSocket):
                     parsed = json.loads(raw_text)
                     spoken = parsed.get("message", "Sorry, I didn't catch that. Could you repeat?")
                     updated_data = parsed.get("data", appointment_data)
+                    appointment_booked = updated_data["appointment_booked"] = parsed.get("appointment_booked", False)
                 except (json.JSONDecodeError, KeyError) as e:
                     logger.error(f"Failed to parse Bedrock JSON response: {e}")
                     spoken = "Sorry, I had a little trouble there. Could you say that again?"
                     updated_data = appointment_data
+                    appointment_booked = updated_data["appointment_booked"] = parsed.get("appointment_booked", False)
 
                 logger.info(f"Ron says: {spoken}")
 
@@ -208,10 +192,12 @@ async def websocket_handler(websocket: WebSocket):
                     "last": True
                 }))
 
-                # If appointment just got booked, wait then hang up
-                if updated_data.get("appointment_booked"):
+                if appointment_booked:
                     logger.info("Appointment booked — ending call.")
-                    await asyncio.sleep(3)
+                    # Estimate speaking time: ~150 words per minute, minimum 5 seconds
+                    word_count = len(spoken.split())
+                    speak_time = max(5, (word_count / 150) * 60)
+                    await asyncio.sleep(speak_time)
                     await websocket.send_text(json.dumps({"type": "end"}))
                     break
 
