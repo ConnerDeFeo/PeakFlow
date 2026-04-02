@@ -3,7 +3,7 @@ import logging
 import asyncio
 from fastapi import APIRouter, WebSocket
 from config import DEFAULT_APPOINTMENT_DATA
-from dynamo import get_conversation_history, save_conversation, get_appointment_data
+from extraction.dynamo import get_conversation_history, save_conversation, get_appointment_data
 from bedrock import stream_conversation, run_extraction
 
 router = APIRouter()

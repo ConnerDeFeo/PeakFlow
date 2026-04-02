@@ -1,7 +1,7 @@
 import logging
 from fastapi import FastAPI
-from twilio_handler import router as twilio_router
-from websocket import router as ws_router
+from extraction.twilio_handler import router as twilio_router
+from voicebot.websocket import router as ws_router
 
 logging.basicConfig(
     level=logging.DEBUG,
