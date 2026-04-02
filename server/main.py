@@ -15,14 +15,18 @@ logger = logging.getLogger(__name__)
 app = FastAPI()
 
 dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
-table = dynamodb.Table("twilio_conversations")
+twilio_conversations = dynamodb.Table("twilio_conversations")
+roofing_appointments = dynamodb.Table("roofing_appointments")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
-
-SYSTEM_PROMPT = """Your name Exodia, the Forbidon One. 
-You are a friendly demo receptionist. People are calling you to talk, have a chat with them. 
-Keep responses short and conversational — you are speaking out loud, not writing.
-Never use bullet points, lists, or special characters.
-Always end with a question to keep the conversation going."""
+DEFAULT_APPOINTMENT_DATA = {
+    "first_name": None,
+    "last_name": None,
+    "address": None,
+    "appointment_type": None,
+    "homeowners_present": None,
+    "attic_access": None,
+    "roof_age": None,
+}
 
 logging.getLogger("botocore").setLevel(logging.WARNING)
 logging.getLogger("boto3").setLevel(logging.WARNING)
@@ -31,13 +35,31 @@ logging.getLogger("boto3").setLevel(logging.WARNING)
 def health():
     return {"status": "ok"}
 
+def get_system_prompt(current_data):
+    return f"""
+        You are a friendly roofing receptionist named Ron. 
+        You are collecting data to set up a roofing inspection. Here is what you have so far: 
+        {current_data}. 
+
+        The order in which you should collect the data is:
+        1. First and Last name
+        2. Address
+        3. Is this for a repair or replacement?
+        4. If this is for a replacement, will both homeowners be home?
+        5. Will the roofers be able to access the attic?
+        6. What is the age of the roof?
+
+        Continue the conversation and collect whatever is missing. 
+        Once all fields are collected, confirm and book the appointment.
+    """
+
 @app.post("/incoming-call")
 def incoming_call():
     response = VoiceResponse()
     connect = Connect()
     conversationrelay = ConversationRelay(
         url="wss://receptionist.connerdefeo.com/ws",
-        welcome_greeting="Hi, thanks for calling! How can I help you today?"
+        welcome_greeting="Hi, thanks for calling! My name is Ron, are you looking to schedule an appointment with Rochester Pro Roofing Today?"
     )
     conversationrelay.language(
         code="en-US",
@@ -61,12 +83,15 @@ async def websocket_handler(websocket: WebSocket):
 
             if event == "setup":
                 call_sid = data.get("callSid")
+                phone_number = data.get("from")
                 # Load existing history if any
-                resp = table.get_item(Key={"call_sid": call_sid})
+                resp = twilio_conversations.get_item(Key={"call_sid": call_sid})
                 history = resp.get("Item", {}).get("history", [])
 
             elif event == "prompt":
                 user_text = data.get("voicePrompt", "")
+                appointment_data_resp = roofing_appointments.get_item(Key={"customer_phone_number": phone_number})
+                appointment_data = appointment_data_resp.get("Item", DEFAULT_APPOINTMENT_DATA)
                 if not user_text:
                     continue
                     
@@ -78,7 +103,7 @@ async def websocket_handler(websocket: WebSocket):
                         "token": "Thanks for calling, have a great day!",
                         "last": True
                     }))
-                    await asyncio.sleep(3)  # give Twilio time to speak the goodbye
+                    await asyncio.sleep(2.5)  # give Twilio time to speak the goodbye
                     # Tell Twilio to end the call
                     await websocket.send_text(json.dumps({
                         "type": "end"
@@ -94,19 +119,19 @@ async def websocket_handler(websocket: WebSocket):
                     accept="application/json",
                     body=json.dumps({
                         "anthropic_version": "bedrock-2023-05-31",
-                        "max_tokens": 150,
-                        "system": SYSTEM_PROMPT,
+                        "max_tokens": 100,
+                        "system": get_system_prompt(appointment_data),
                         "messages": history
                     })
                 )
 
-                full_reply = ""
+                full_reply = []
                 for bedrock_event in response["body"]:
                     chunk = json.loads(bedrock_event["chunk"]["bytes"])
                     if chunk["type"] == "content_block_delta":
                         token = chunk["delta"].get("text", "")
                         if token:
-                            full_reply += token
+                            full_reply.append(token)
                             await websocket.send_text(json.dumps({
                                 "type": "text",
                                 "token": token,
@@ -120,12 +145,10 @@ async def websocket_handler(websocket: WebSocket):
                     "last": True
                 }))
 
-                print(f"Bedrock reply: '{full_reply}'")
 
                 # Save history
-                history.append({"role": "assistant", "content": full_reply})
-                print(f"Saving history to DynamoDB (total: {len(history)} messages)")
-                table.put_item(Item={
+                history.append({"role": "assistant", "content": "".join(full_reply)})
+                twilio_conversations.put_item(Item={
                     "call_sid": call_sid,
                     "history": history,
                     "expires_at": int(time.time()) + 3600
