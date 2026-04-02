@@ -45,12 +45,17 @@ def get_system_prompt(current_data):
         1. First and Last name
         2. Address
         3. Is this for a repair or replacement?
-        4. If this is for a replacement, will both homeowners be home?
-        5. Will the roofers be able to access the attic?
-        6. What is the age of the roof?
+        4. What is the date you are looking to book the appointment for?
+        5. If this is for a replacement, will both homeowners be home?
+        6. Will the roofers be able to access the attic?
+        7. What is the age of the roof?
 
         Continue the conversation and collect whatever is missing. 
+        Do not move on to the next question until you have the answer to the current question.
         Once all fields are collected, confirm and book the appointment.
+        
+        Never use markdown, asterisks, bullet points, or any special characters in your responses. 
+        Speak in plain conversational sentences only, as this is a phone call.
     """
 
 @app.post("/incoming-call")
@@ -59,7 +64,7 @@ def incoming_call():
     connect = Connect()
     conversationrelay = ConversationRelay(
         url="wss://receptionist.connerdefeo.com/ws",
-        welcome_greeting="Hi, thanks for calling! My name is Ron, are you looking to schedule an appointment with Rochester Pro Roofing Today?"
+        welcome_greeting="Hi, this is Rochester Pro Roofing. How can I help you today?"
     )
     conversationrelay.language(
         code="en-US",
