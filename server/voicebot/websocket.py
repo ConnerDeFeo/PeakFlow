@@ -70,6 +70,7 @@ async def websocket_handler(websocket: WebSocket):
 
                     assistant_text = "".join(full_reply)
                     appointment_booked = APPOINTMENT_BOOKED_INDICATOR in assistant_text
+                    logger.debug(f"Assistant text: {assistant_text!r}, Tokens: {token_count}, Appointment booked: {appointment_booked}")
                     history.append({"role": "assistant", "content": assistant_text})
 
                     # Save conversation history
