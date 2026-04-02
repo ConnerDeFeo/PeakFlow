@@ -1,11 +1,10 @@
 import json
 import logging
 from config import bedrock
-from extraction.dynamo import save_appointment_data, save_conversation
+from dynamo import save_appointment_data, save_conversation
+from config import CONVERSATION_MODEL, EXTRACTION_MODEL
 
 logger = logging.getLogger(__name__)
-
-CONVERSATION_MODEL = EXTRACTION_MODEL = "us.anthropic.claude-sonnet-4-5-20251001-v1:0"
 
 
 def get_conversation_prompt(current_data: dict) -> str:

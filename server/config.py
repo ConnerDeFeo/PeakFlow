@@ -4,6 +4,7 @@ twilio_conversations = dynamodb.Table("twilio_conversations")
 roofing_appointments = dynamodb.Table("roofing_appointments")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 
+CONVERSATION_MODEL = EXTRACTION_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
 DEFAULT_APPOINTMENT_DATA = {
     "first_name": None,
     "last_name": None,
