@@ -174,6 +174,7 @@ async def websocket_handler(websocket: WebSocket):
                 )
 
                 raw_body = json.loads(response["body"].read())
+                logger.debug(f"Full raw body: {raw_body}")  # add this
                 raw_text = raw_body["content"][0]["text"].strip()
                 logger.debug(f"Bedrock raw response: {raw_text}")
 
