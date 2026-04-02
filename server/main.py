@@ -127,7 +127,7 @@ async def websocket_handler(websocket: WebSocket):
                     accept="application/json",
                     body=json.dumps({
                         "anthropic_version": "bedrock-2023-05-31",
-                        "max_tokens": 100,
+                        "max_tokens": 75,
                         "system": get_system_prompt(appointment_data),
                         "messages": history
                     })
