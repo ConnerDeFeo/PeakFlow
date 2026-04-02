@@ -1,6 +1,6 @@
 import json
 import logging
-from config import bedrock
+from config import APPOINTMENT_BOOKED_INDICATOR, bedrock
 from extraction.dynamo import save_appointment_data, save_conversation
 from config import CONVERSATION_MODEL, EXTRACTION_MODEL
 
@@ -11,56 +11,63 @@ def get_conversation_prompt(current_data: dict) -> str:
     collected = {k: v for k, v in current_data.items() if v is not None}
     missing = [k for k, v in current_data.items() if v is None]
 
-    return f"""You are a friendly roofing receptionist named Ron for Rochester Pro Roofing.
-Your job is to have a natural phone conversation to book a roofing inspection appointment.
+    return f"""
+        You are a friendly roofing receptionist named Ron for Rochester Pro Roofing.
+        Your job is to have a natural phone conversation to book a roofing inspection appointment.
 
-Information already collected:
-{json.dumps(collected, indent=2)}
+        Information already collected:
+        {json.dumps(collected, indent=2)}
 
-Information still needed:
-{missing}
+        Information still needed:
+        {missing}
 
-Guidelines:
-- Speak naturally and conversationally, like a real receptionist on the phone.
-- Collect information in this order: first and last name, address, repair or replacement,
-  preferred appointment date, (if replacement only) whether both partners can be present,
-  attic access (yes/no/crawl space), roof age.
-- For replacements, mention both partners naturally: "Since we go over systems, colors, and
-  pricing options, it works best when both partners can be there. Is that something you can arrange?"
-- Skip the partners question entirely for repairs.
-- Only ask one question at a time. Do not move on to the next question until you get a clear answer to the current one.
-- Once you have everything, give a friendly confirmation summary and ask if they have any questions.
-- After confirming and answering any questions, say a warm goodbye and let them know someone 
-  from the team will be in touch.
-- Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
-- Keep responses concise and natural."""
+        Guidelines:
+        - Speak naturally and conversationally, like a real receptionist on the phone.
+        - Collect information in this order: first and last name, address, repair or replacement,
+        preferred appointment date, (if replacement only) whether both partners can be present,
+        attic access (yes/no/crawl space), roof age.
+        - For replacements, mention both partners naturally: "Since we go over systems, colors, and
+        pricing options, it works best when both partners can be there. Is that something you can arrange?"
+        - Skip the partners question entirely for repairs.
+        - Only ask one question at a time. Do not move on to the next question until you get a clear answer to the current one.
+        - Once you have everything, give a friendly confirmation summary and ask if they have any questions.
+        - After confirming and answering any questions, say a warm goodbye and let them know someone 
+        from the team will be in touch.
+        - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
+        - Keep responses concise and natural.
+        - After confirming and answering any questions, say a warm goodbye and let them know someone from the team will be in touch. 
+        - CRITICALL: On the final goodbye message to the user, say "{APPOINTMENT_BOOKED_INDICATOR}" exactly.
+    """
 
 
 def get_extraction_prompt(user_text: str, assistant_text: str, current_data: dict) -> str:
-    return f"""Extract any roofing appointment information from this conversation turn.
-Return ONLY a raw JSON object with fields that were clearly mentioned.
-Do not include fields that were not mentioned. Do not include null values.
-Do not wrap in markdown or code fences.
+    return f"""
+        Extract any roofing appointment information from this conversation turn.
+        Return ONLY a raw JSON object with fields that were clearly mentioned.
+        Do not include fields that were not mentioned. Do not include null values.
+        Do not wrap in markdown or code fences. Use the Follwing Format:
+        
+        {{
+            "first_name": string,
+            "last_name": string,
+            "address": string,
+            "appointment_type": "repair" or "replacement",
+            "appointment_date": string,
+            "homeowners_present": "yes", "no", or "N/A" for repairs,
+            "attic_access": "yes", "no", or "crawl space",
+            "roof_age": string,
+            "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
+        }}
 
-Fields to extract:
-- first_name (string)
-- last_name (string)
-- address (string)
-- appointment_type ("repair" or "replacement")
-- appointment_date (string)
-- homeowners_present ("yes", "no", or "N/A" for repairs)
-- attic_access ("yes", "no", or "crawl space")
-- roof_age (string)
-- appointment_booked (true only if assistant explicitly confirmed the booking and said goodbye)
+        Current data already collected (do not re-extract unless corrected):
+        {json.dumps(current_data, indent=2)}
 
-Current data already collected (do not re-extract unless corrected):
-{json.dumps(current_data, indent=2)}
+        Conversation turn:
+        User: "{user_text}"
+        Assistant: "{assistant_text}"
 
-Conversation turn:
-User: "{user_text}"
-Assistant: "{assistant_text}"
-
-Return only a JSON object with newly extracted or corrected fields. If nothing new was mentioned, return {{}}."""
+        Return only a JSON object with newly extracted or corrected fields. If nothing new was mentioned, return {{}}.
+    """
 
 
 def stream_conversation(history: list, appointment_data: dict):
