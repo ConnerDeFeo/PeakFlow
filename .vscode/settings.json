@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./server/extraction",
+        "./server/voicebot"
+    ]
+}
