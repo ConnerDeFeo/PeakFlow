@@ -26,6 +26,7 @@ DEFAULT_APPOINTMENT_DATA = {
     "homeowners_present": None,
     "attic_access": None,
     "roof_age": None,
+    "appointment_booked": False
 }
 
 logging.getLogger("botocore").setLevel(logging.WARNING)
@@ -56,6 +57,9 @@ def get_system_prompt(current_data):
         
         Never use markdown, asterisks, bullet points, or any special characters in your responses. 
         Speak in plain conversational sentences only, as this is a phone call.
+        
+        Once all the information is gathered, confirm the information with the customer, ask if they have any questions.
+        Once all of the above is completed, set "appointment_booked" to True.
     """
 
 @app.post("/incoming-call")
@@ -100,9 +104,8 @@ async def websocket_handler(websocket: WebSocket):
                 if not user_text:
                     continue
                     
-                # Check for goodbye before calling Claude
-                goodbye_words = ["goodbye", "bye", "hang up", "that's all", "thank you bye"]
-                if any(word in user_text.lower() for word in goodbye_words):
+                # Check if appointment_booked is True, if so, skip processing and just respond with a confirmation message
+                if appointment_data.get("appointment_booked"):
                     await websocket.send_text(json.dumps({
                         "type": "text",
                         "token": "Thanks for calling, have a great day!",
