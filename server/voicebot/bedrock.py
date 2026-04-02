@@ -1,7 +1,7 @@
 import json
 import logging
 from config import bedrock
-from dynamo import save_appointment_data, save_conversation
+from extraction.dynamo import save_appointment_data, save_conversation
 
 logger = logging.getLogger(__name__)
 
