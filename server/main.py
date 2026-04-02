@@ -174,8 +174,13 @@ async def websocket_handler(websocket: WebSocket):
                 )
 
                 raw_body = json.loads(response["body"].read())
-                logger.debug(f"Full raw body: {raw_body}")  # add this
+                logger.debug(f"Full raw body: {raw_body}")
                 raw_text = raw_body["content"][0]["text"].strip()
+                if raw_text.startswith("```"):
+                    raw_text = raw_text.split("```")[1]  # get content between fences
+                    if raw_text.startswith("json"):
+                        raw_text = raw_text[4:]  # strip the "json" label
+                    raw_text = raw_text.strip()
                 logger.debug(f"Bedrock raw response: {raw_text}")
 
                 # Parse the JSON response from Bedrock
