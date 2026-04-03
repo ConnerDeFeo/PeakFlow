@@ -16,7 +16,7 @@ def incoming_call():
     conversationrelay = ConversationRelay(
         url="wss://receptionist.connerdefeo.com/ws",
         welcome_greeting="Hi, this is Rochester Pro Roofing, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
-        interruptible = False
+        welcome_greeting_interruptible = False
     )
     conversationrelay.language(
         code="en-US",

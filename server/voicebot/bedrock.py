@@ -12,7 +12,7 @@ def get_conversation_prompt(current_data: dict) -> str:
     missing = [k for k, v in current_data.items() if v is None]
 
     return f"""
-        You are a friendly roofing receptionist named Ron for Roofing Rochester.
+        You are a friendly AI roofing receptionist for Roofing Rochester.
         Your job is to have a natural phone conversation to book a roofing inspection appointment.
 
         Information already collected:
