@@ -5,7 +5,7 @@ roofing_appointments = dynamodb.Table("roofing_appointments")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 
 CONVERSATION_MODEL = EXTRACTION_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
-APPOINTMENT_BOOKED_INDICATOR = "Thank you for choosing Rochester Pro Roofing, we look forward to meeting you!"
+APPOINTMENT_BOOKED_INDICATOR = "Thank you for choosing Roofing Rochester, we look forward to meeting you!"
 DEFAULT_APPOINTMENT_DATA = {
     "first_name": None,
     "last_name": None,
