@@ -21,6 +21,9 @@ async def websocket_handler(websocket: WebSocket):
 
     try:
         async for message in websocket.iter_text():
+            if is_processing:
+                continue
+
             data = json.loads(message)
             event = data.get("type")
 
@@ -33,9 +36,6 @@ async def websocket_handler(websocket: WebSocket):
             elif event == "prompt":
                 user_text = data.get("voicePrompt", "").strip()
                 if not user_text:
-                    continue
-
-                if is_processing:
                     continue
 
                 is_processing = True
