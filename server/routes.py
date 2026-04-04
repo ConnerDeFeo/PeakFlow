@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 @router.post("/incoming-call")
 def incoming_call_route_roofing_rochester():
+    logger.info("Received incoming call for Roofing Rochester")
     return incoming_call(
         websocket_url=f"{SERVER_URL}/ws",
         welcome_greeting="Hi, this is Rochester Pro Roofing, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
@@ -17,4 +18,5 @@ def incoming_call_route_roofing_rochester():
 
 @router.websocket("/ws")
 async def websocket_route_roofing_rochester(websocket: WebSocket):
+    logger.info("WebSocket connection established for Roofing Rochester")
     return websocket_handler(websocket, Client.ROOFING_ROCHESTER)
