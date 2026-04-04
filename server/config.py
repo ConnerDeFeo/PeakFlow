@@ -7,11 +7,13 @@ bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 
 SERVER_DOMAIN = "receptionist.connerdefeo.com"
 CONVERSATION_MODEL = EXTRACTION_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
+INCOMING_CALL = "incoming-call"
+WS = "ws"
 
 # Constants to identify different configurations used across the app
 class Client(Enum):
-    ROOFING_ROCHESTER = "roofing_rochester"
     PERSONAL = "personal"
+    ROOFING_ROCHESTER = "roofing-rochester"
 
 DEFAULT_APPOINTMENT_DATA: dict[Client, dict[str, None]] = {
     Client.ROOFING_ROCHESTER: {
