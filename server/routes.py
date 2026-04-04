@@ -18,13 +18,14 @@ def incoming_call_route_personal():
 
 @router.websocket(f"/{Client.PERSONAL}/{WS}")
 async def websocket_route_personal(websocket: WebSocket):
+    print(f"WebSocket connection established for Personal at {SERVER_DOMAIN}/{Client.PERSONAL}/{WS}")
     logger.info("WebSocket connection established for Personal")
     await websocket_handler(websocket, Client.PERSONAL)
 
 # Roofing Rochester routes
 @router.post(f"/{Client.ROOFING_ROCHESTER}/{INCOMING_CALL}")
 def incoming_call_route_roofing_rochester():
-    logger.info("Received incoming call for Roofing Rochester")
+    logger.info(f"Incoming call route hit for Roofing Rochester at {SERVER_DOMAIN}/{Client.ROOFING_ROCHESTER}/{INCOMING_CALL}")
     return incoming_call(
         websocket_url=f"wss://{SERVER_DOMAIN}/{Client.ROOFING_ROCHESTER}/{WS}",
         welcome_greeting="Hi, this is Roofing Rochester, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
@@ -33,5 +34,6 @@ def incoming_call_route_roofing_rochester():
 
 @router.websocket(f"/{Client.ROOFING_ROCHESTER}/{WS}")
 async def websocket_route_roofing_rochester(websocket: WebSocket):
+    print(f"WebSocket connection established for Roofing Rochester at {SERVER_DOMAIN}/{Client.ROOFING_ROCHESTER}/{WS}")
     logger.info("WebSocket connection established for Roofing Rochester")
     await websocket_handler(websocket, Client.ROOFING_ROCHESTER)
