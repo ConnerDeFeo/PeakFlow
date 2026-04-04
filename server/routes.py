@@ -1,6 +1,6 @@
 import logging
 from fastapi import APIRouter, WebSocket
-from config import SERVER_URL, Client
+from config import SERVER_DOMAIN, Client
 from incoming_call_handler import incoming_call
 from websocket_handler import websocket_handler
 
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 def incoming_call_route_roofing_rochester():
     logger.info("Received incoming call for Roofing Rochester")
     return incoming_call(
-        websocket_url=f"{SERVER_URL}/ws",
+        websocket_url=f"wss://{SERVER_DOMAIN}/ws",
         welcome_greeting="Hi, this is Rochester Pro Roofing, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
         voice_name="7EzWGsX10sAS4c9m9cPf"
     )
