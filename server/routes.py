@@ -19,4 +19,4 @@ def incoming_call_route_roofing_rochester():
 @router.websocket("/ws")
 async def websocket_route_roofing_rochester(websocket: WebSocket):
     logger.info("WebSocket connection established for Roofing Rochester")
-    return websocket_handler(websocket, Client.ROOFING_ROCHESTER)
+    await websocket_handler(websocket, Client.ROOFING_ROCHESTER)
