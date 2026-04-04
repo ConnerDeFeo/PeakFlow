@@ -12,7 +12,7 @@ def incoming_call_route_roofing_rochester():
     logger.info("Received incoming call for Roofing Rochester")
     return incoming_call(
         websocket_url=f"wss://{SERVER_DOMAIN}/roofing-rochester/ws",
-        welcome_greeting="Hi, this is Rochester Pro Roofing, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
+        welcome_greeting="Hi, this is Roofing Rochester, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
         voice_name="7EzWGsX10sAS4c9m9cPf"
     )
 
