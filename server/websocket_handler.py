@@ -2,7 +2,7 @@ import json
 import logging
 import asyncio
 from fastapi import APIRouter, WebSocket
-from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA, TABLES, Client
+from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA, Client
 from dynamo import DynamoDB
 from conversation import stream_conversation
 from extraction import run_extraction
@@ -16,7 +16,7 @@ async def websocket_handler(websocket: WebSocket, client: Client):
     phone_number = None
     history = []
     is_processing = False
-    dynamo = DynamoDB(TABLES[client])
+    dynamo = DynamoDB(client)
 
     try:
         async for message in websocket.iter_text():

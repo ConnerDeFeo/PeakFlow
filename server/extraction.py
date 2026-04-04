@@ -58,11 +58,11 @@ async def run_extraction(
 
         extracted = json.loads(raw_text)
         appointment_booked = extracted.pop("appointment_booked", False)
+        dynamo = DynamoDB(client)
 
         if extracted:
             updated_data = {**current_data, **extracted}
             if phone_number:
-                dynamo = DynamoDB(TABLES[Client])
                 dynamo.save_appointment_data(phone_number, updated_data)
 
         if call_sid:

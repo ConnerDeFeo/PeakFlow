@@ -1,14 +1,13 @@
 import time
 import logging
-from typing import Any
-from config import twilio_conversations
+from config import Client, twilio_conversations, TABLES
     
 
 logger = logging.getLogger(__name__)
 
 class DynamoDB():
-    def __init__(self, table: Any):
-        self.table = table
+    def __init__(self, client: Client):
+        self.table = TABLES[client]
     
     def get_conversation_history(self, call_sid: str) -> list:
         resp = twilio_conversations.get_item(Key={"call_sid": call_sid})
