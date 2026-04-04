@@ -1,8 +1,8 @@
 import logging
 from fastapi import APIRouter, WebSocket
 from config import SERVER_URL, Client
-from server.incoming_call_handler import incoming_call
-from server.websocket_handler import websocket_handler
+from incoming_call_handler import incoming_call
+from websocket_handler import websocket_handler
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
