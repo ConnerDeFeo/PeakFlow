@@ -15,9 +15,17 @@ resource "aws_dynamodb_table" "twilio_conversations" {
   }
 }
 
+locals {
+  tables = toset([
+    "personal_appointments",
+    "roofing_rochester_appointments"
+  ])
+}
+
 # Per customer data store for roofing appointments. Stores customer information and appointment details.
-resource "aws_dynamodb_table" "roofing_appointments" {
-  name         = "roofing_appointments"
+resource "aws_dynamodb_table" "appointment_tables" {
+  for_each = local.tables
+  name         = each.value
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "customer_phone_number"
 

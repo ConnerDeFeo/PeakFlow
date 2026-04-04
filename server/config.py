@@ -1,8 +1,10 @@
+from typing import Any
 import boto3
 from enum import Enum
 dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
 twilio_conversations = dynamodb.Table("twilio_conversations")
-roofing_appointments = dynamodb.Table("roofing_appointments")
+roofing_rochester_appointments = dynamodb.Table("roofing_rochester_appointments")
+personal_appointments = dynamodb.Table("personal_appointments")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 
 SERVER_DOMAIN = "receptionist.connerdefeo.com"
@@ -15,7 +17,19 @@ class Client(Enum):
     PERSONAL = "personal"
     ROOFING_ROCHESTER = "roofing-rochester"
 
+TABLES: dict[Client, Any] = {
+    Client.PERSONAL: personal_appointments,
+    Client.ROOFING_ROCHESTER: roofing_rochester_appointments
+}
+
 DEFAULT_APPOINTMENT_DATA: dict[Client, dict[str, None]] = {
+    Client.PERSONAL: {
+        "first_name": None,
+        "last_name": None,
+        "company": None,
+        "appointment_type": None,
+        "appointment_date": None
+    },
     Client.ROOFING_ROCHESTER: {
         "first_name": None,
         "last_name": None,
@@ -33,7 +47,20 @@ APPOINTMENT_BOOKED_INDICATOR: dict[Client, str] = {
 }
 
 CONVERSATION_TEMPLATES: dict[Client, str] = {
-    Client.PERSONAL: "",
+    Client.PERSONAL: """
+        You are a helpful assistant helping Conner DeFeo.
+        Your job is to have a natural phone conversation to book an appointment to setup an AI receptionist for the company of the person calling.
+    
+        Information already collected:
+        {collected}
+
+        Information still needed:
+        {missing}
+
+        Guidelines:
+        - Speak naturally and conversationally, like a real receptionist on the phone.
+        - Collect information in this order: first and last name, company name, 
+    """,
     Client.ROOFING_ROCHESTER: """
         You are a friendly AI roofing receptionist for Roofing Rochester.
         Your job is to have a natural phone conversation to book a roofing inspection appointment.

@@ -2,8 +2,8 @@ import json
 import logging
 import asyncio
 from fastapi import APIRouter, WebSocket
-from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA, Client
-from dynamo import get_conversation_history, save_conversation, get_appointment_data
+from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA, TABLES, Client
+from dynamo import DynamoDB
 from conversation import stream_conversation
 from extraction import run_extraction
 
@@ -16,6 +16,7 @@ async def websocket_handler(websocket: WebSocket, client: Client):
     phone_number = None
     history = []
     is_processing = False
+    dynamo = DynamoDB(TABLES[client])
 
     try:
         async for message in websocket.iter_text():
@@ -28,7 +29,7 @@ async def websocket_handler(websocket: WebSocket, client: Client):
             if event == "setup":
                 call_sid = data.get("callSid")
                 phone_number = data.get("from")
-                history = get_conversation_history(call_sid)
+                history = dynamo.get_conversation_history(call_sid)
 
             elif event == "prompt":
                 user_text = data.get("voicePrompt", "").strip()
@@ -38,7 +39,7 @@ async def websocket_handler(websocket: WebSocket, client: Client):
                 is_processing = True
 
                 try:
-                    appointment_data = get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
+                    appointment_data = dynamo.get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
                     history.append({"role": "user", "content": user_text})
 
                     # Stream conversational response to Twilio
@@ -70,7 +71,7 @@ async def websocket_handler(websocket: WebSocket, client: Client):
                     history.append({"role": "assistant", "content": assistant_text})
 
                     # Save conversation history
-                    save_conversation(call_sid, history)
+                    dynamo.save_conversation(call_sid, history)
 
                     # Fire extraction in background
                     asyncio.create_task(run_extraction(

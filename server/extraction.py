@@ -1,7 +1,7 @@
 import json
 import logging
-from config import EXTRACTION_PROMPTS, Client, bedrock
-from dynamo import save_appointment_data, save_conversation
+from config import EXTRACTION_PROMPTS, TABLES, Client, bedrock
+from dynamo import DynamoDB
 from config import EXTRACTION_MODEL
 
     
@@ -62,10 +62,11 @@ async def run_extraction(
         if extracted:
             updated_data = {**current_data, **extracted}
             if phone_number:
-                save_appointment_data(phone_number, updated_data)
+                dynamo = DynamoDB(TABLES[Client])
+                dynamo.save_appointment_data(phone_number, updated_data)
 
         if call_sid:
-            save_conversation(call_sid, history, appointment_booked)
+            dynamo.save_conversation(call_sid, history, appointment_booked)
 
     except Exception as e:
         logger.error(f"Extraction failed: {e}")

@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 def incoming_call_route_personal():
     return incoming_call(
         websocket_url=f"wss://{SERVER_DOMAIN}/{Client.PERSONAL.value}/{WS}",
-        welcome_greeting="Hi, this is Conner DeFeo, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
+        welcome_greeting="Hello! I am an AI receptionist, how can I assist you today?",
         voice_name="7EzWGsX10sAS4c9m9cPf"
     )
 
