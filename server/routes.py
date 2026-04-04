@@ -7,16 +7,16 @@ from websocket_handler import websocket_handler
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-@router.post("/incoming-call")
+@router.post("/roofing-rochester/incoming-call")
 def incoming_call_route_roofing_rochester():
     logger.info("Received incoming call for Roofing Rochester")
     return incoming_call(
-        websocket_url=f"wss://{SERVER_DOMAIN}/ws",
+        websocket_url=f"wss://{SERVER_DOMAIN}/roofing-rochester/ws",
         welcome_greeting="Hi, this is Rochester Pro Roofing, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
         voice_name="7EzWGsX10sAS4c9m9cPf"
     )
 
-@router.websocket("/ws")
+@router.websocket("/roofing-rochester/ws")
 async def websocket_route_roofing_rochester(websocket: WebSocket):
     logger.info("WebSocket connection established for Roofing Rochester")
     await websocket_handler(websocket, Client.ROOFING_ROCHESTER)
