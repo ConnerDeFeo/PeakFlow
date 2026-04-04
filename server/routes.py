@@ -8,7 +8,7 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 @router.post("/incoming-call")
-def incoming_call_route():
+def incoming_call_route_roofing_rochester():
     return incoming_call(
         websocket_url=f"{SERVER_URL}/ws",
         welcome_greeting="Hi, this is Rochester Pro Roofing, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",

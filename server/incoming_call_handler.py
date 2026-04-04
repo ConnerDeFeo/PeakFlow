@@ -1,9 +1,7 @@
-from fastapi import APIRouter, Response
+from fastapi import Response
 from twilio.twiml.voice_response import VoiceResponse, Connect, ConversationRelay
 
-router = APIRouter()
 
-@router.post("/incoming-call")
 def incoming_call(websocket_url: str, welcome_greeting: str, voice_name: str):
     response = VoiceResponse()
     connect = Connect()
