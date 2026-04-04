@@ -21,7 +21,7 @@ async def websocket_route_personal(websocket: WebSocket):
     await websocket_handler(websocket, Client.PERSONAL)
 
 # Roofing Rochester routes
-@router.post(f"/roofing-rochester/incoming-call")
+@router.post(f"/roofing-rochester/{INCOMING_CALL}")
 def incoming_call_route_roofing_rochester():
     return incoming_call(
         websocket_url=f"wss://{SERVER_DOMAIN}/{Client.ROOFING_ROCHESTER}/{WS}",
