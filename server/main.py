@@ -1,7 +1,7 @@
 import logging
 from fastapi import FastAPI
-from extraction.twilio_handler import router as twilio_router
-from voicebot.websocket import router as ws_router
+from routes.rochester_roofing.rochester_roofing_handler import router as twilio_router
+from routes.rochester_roofing.rochester_roofing_websocket import router as ws_router
 
 logging.basicConfig(
     level=logging.DEBUG,
