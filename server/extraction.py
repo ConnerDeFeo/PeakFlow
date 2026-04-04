@@ -1,40 +1,20 @@
 import json
 import logging
-from config import bedrock
+from config import EXTRACTION_PROMPTS, Client, bedrock
 from dynamo import save_appointment_data, save_conversation
 from config import EXTRACTION_MODEL
 
     
 logger = logging.getLogger(__name__)
 
-def get_extraction_prompt(user_text: str, assistant_text: str, current_data: dict) -> str:
-    return f"""
-        Extract any roofing appointment information from this conversation turn.
-        Return ONLY a raw JSON object with fields that were clearly mentioned.
-        Do not include fields that were not mentioned. Do not include null values.
-        Do not wrap in markdown or code fences. Use the Follwing Format:
-        
-        {{
-            "first_name": string,
-            "last_name": string,
-            "address": string,
-            "appointment_type": "repair" or "replacement",
-            "appointment_date": string,
-            "homeowners_present": "yes", "no", or "N/A" for repairs,
-            "attic_access": "yes", "no", or "crawl space",
-            "roof_age": string,
-            "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
-        }}
-
-        Current data already collected (do not re-extract unless corrected):
-        {json.dumps(current_data, indent=2)}
-
-        Conversation turn:
-        User: "{user_text}"
-        Assistant: "{assistant_text}"
-
-        Return only a JSON object with newly extracted or corrected fields. If nothing new was mentioned, return {{}}.
-    """
+def get_extraction_prompt(user_text: str, assistant_text: str, current_data: dict, prompt: str) -> str:
+    current_data_json = json.dumps(current_data, indent=2)
+    variables = {
+        "user_text": user_text,
+        "assistant_text": assistant_text,
+        "current_data_json": current_data_json
+    }
+    return prompt.format_map(variables)
 
 async def run_extraction(
     user_text: str,
@@ -42,7 +22,8 @@ async def run_extraction(
     current_data: dict,
     phone_number: str,
     call_sid: str,
-    history: list
+    history: list,
+    client: Client
 ):
     """Runs in background after each turn — extracts structured data and saves to DynamoDB."""
     try:
@@ -55,7 +36,7 @@ async def run_extraction(
                 "max_tokens": 300,
                 "messages": [{
                     "role": "user",
-                    "content": get_extraction_prompt(user_text, assistant_text, current_data)
+                    "content": get_extraction_prompt(user_text, assistant_text, current_data, EXTRACTION_PROMPTS[client])
                 }]
             })
         )

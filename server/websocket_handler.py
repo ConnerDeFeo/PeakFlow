@@ -2,17 +2,15 @@ import json
 import logging
 import asyncio
 from fastapi import APIRouter, WebSocket
-from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA
-from dynamo import get_conversation_history, save_conversation, get_appointment_data
-from conversation import stream_conversation
-from extraction import run_extraction
+from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA, Client
+from server.dynamo import get_conversation_history, save_conversation, get_appointment_data
+from server.conversation import stream_conversation
+from server.extraction import run_extraction
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-
-@router.websocket("/ws")
-async def websocket_handler(websocket: WebSocket):
+async def websocket_handler(websocket: WebSocket, client: Client):
     await websocket.accept()
     logger.debug("WebSocket connection accepted")
     call_sid = None
@@ -31,7 +29,6 @@ async def websocket_handler(websocket: WebSocket):
             if event == "setup":
                 call_sid = data.get("callSid")
                 phone_number = data.get("from")
-                logger.info(f"Call started — SID: {call_sid}, From: {phone_number}")
                 history = get_conversation_history(call_sid)
 
             elif event == "prompt":
@@ -42,11 +39,11 @@ async def websocket_handler(websocket: WebSocket):
                 is_processing = True
 
                 try:
-                    appointment_data = get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA)
+                    appointment_data = get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
                     history.append({"role": "user", "content": user_text})
 
                     # Stream conversational response to Twilio
-                    stream_response = stream_conversation(history, appointment_data)
+                    stream_response = stream_conversation(history, appointment_data, client)
 
                     full_reply = []
                     token_count = 0
@@ -70,8 +67,7 @@ async def websocket_handler(websocket: WebSocket):
                     }))
 
                     assistant_text = "".join(full_reply)
-                    appointment_booked = APPOINTMENT_BOOKED_INDICATOR in assistant_text
-                    logger.debug(f"Assistant text: {assistant_text!r}, Tokens: {token_count}, Appointment booked: {appointment_booked}")
+                    appointment_booked = APPOINTMENT_BOOKED_INDICATOR[client] in assistant_text
                     history.append({"role": "assistant", "content": assistant_text})
 
                     # Save conversation history
@@ -84,11 +80,11 @@ async def websocket_handler(websocket: WebSocket):
                         current_data=appointment_data,
                         phone_number=phone_number,
                         call_sid=call_sid,
-                        history=history
+                        history=history,
+                        client=client
                     ))
 
                     if appointment_booked:
-                        logger.info("Appointment booked — ending call.")
                         word_count = len(assistant_text.split())
                         speak_time = max(5, (word_count / 160) * 60)
                         await asyncio.sleep(speak_time)
