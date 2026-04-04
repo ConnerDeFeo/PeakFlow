@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 async def websocket_handler(websocket: WebSocket, client: Client):
     await websocket.accept()
-    logger.debug("WebSocket connection accepted")
     call_sid = None
     phone_number = None
     history = []
@@ -37,7 +36,6 @@ async def websocket_handler(websocket: WebSocket, client: Client):
                     continue
 
                 is_processing = True
-                logger.info(f"[USER] {user_text}")
 
                 try:
                     appointment_data = get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
@@ -68,7 +66,6 @@ async def websocket_handler(websocket: WebSocket, client: Client):
                     }))
 
                     assistant_text = "".join(full_reply)
-                    logger.info(f"[BOT] {assistant_text}")
                     appointment_booked = APPOINTMENT_BOOKED_INDICATOR[client] in assistant_text
                     history.append({"role": "assistant", "content": assistant_text})
 
@@ -97,11 +94,7 @@ async def websocket_handler(websocket: WebSocket, client: Client):
                     is_processing = False
 
             elif event == "stop":
-                logger.info("Call ended by Twilio.")
                 break
-
-            else:
-                logger.debug(f"Unrecognized event type received: {event!r}")
 
     except Exception as e:
         logger.exception(f"Unhandled error in websocket_handler: {e}")
