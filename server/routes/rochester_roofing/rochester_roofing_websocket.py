@@ -4,7 +4,8 @@ import asyncio
 from fastapi import APIRouter, WebSocket
 from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA
 from dynamo import get_conversation_history, save_conversation, get_appointment_data
-from conversation import stream_conversation, run_extraction
+from conversation import stream_conversation
+from extraction import run_extraction
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
