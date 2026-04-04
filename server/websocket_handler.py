@@ -37,6 +37,7 @@ async def websocket_handler(websocket: WebSocket, client: Client):
                     continue
 
                 is_processing = True
+                logger.info(f"[USER] {user_text}")
 
                 try:
                     appointment_data = get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
@@ -67,6 +68,7 @@ async def websocket_handler(websocket: WebSocket, client: Client):
                     }))
 
                     assistant_text = "".join(full_reply)
+                    logger.info(f"[BOT] {assistant_text}")
                     appointment_booked = APPOINTMENT_BOOKED_INDICATOR[client] in assistant_text
                     history.append({"role": "assistant", "content": assistant_text})
 
