@@ -27,7 +27,6 @@ DEFAULT_APPOINTMENT_DATA: dict[Client, dict[str, None]] = {
         "first_name": None,
         "last_name": None,
         "company": None,
-        "appointment_type": None,
         "appointment_date": None
     },
     Client.ROOFING_ROCHESTER: {
@@ -43,6 +42,7 @@ DEFAULT_APPOINTMENT_DATA: dict[Client, dict[str, None]] = {
 }
 
 APPOINTMENT_BOOKED_INDICATOR: dict[Client, str] = {
+    Client.PERSONAL: "Thank you for booking an appointment, have a good rest of your day!",
     Client.ROOFING_ROCHESTER: "Thank you for choosing Roofing Rochester, we look forward to meeting you!"
 }
 
@@ -60,6 +60,13 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         Guidelines:
         - Speak naturally and conversationally, like a real receptionist on the phone.
         - Collect information in this order: first and last name, company name, 
+        - Only ask one question at a time. Do not move on to the next question until you get a clear answer to the current one.
+        - After confirming and answering any questions, say a warm goodbye and let them know someone 
+        from the team will be in touch.
+        - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
+        - Keep responses concise and natural.
+        
+        CRITICAL: On the final goodbye message to the user, say "{appointment_booked_indicator}" exactly to end it off.
     """,
     Client.ROOFING_ROCHESTER: """
         You are a friendly AI roofing receptionist for Roofing Rochester.
@@ -89,11 +96,35 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
         - Keep responses concise and natural.
         - After confirming and answering any questions, say a warm goodbye and let them know someone from the team will be in touch.
-        - CRITICALL: On the final goodbye message to the user, say "{appointment_booked_indicator}" exactly to end it off.
+        
+        CRITICAL: On the final goodbye message to the user, say "{appointment_booked_indicator}" exactly to end it off.
     """
 }
 
 EXTRACTION_PROMPTS: dict[Client, str] = {
+    Client.PERSONAL: """
+        Extract any appointment information from this conversation turn.
+        Return ONLY a raw JSON object with fields that were clearly mentioned.
+        Do not include fields that were not mentioned. Do not include null values.
+        Do not wrap in markdown or code fences. Use the Follwing Format:
+        
+        {{
+            "first_name": string,
+            "last_name": string,
+            "company": string,
+            "appointment_date": string,
+            "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
+        }}
+
+        Current data already collected (do not re-extract unless corrected):
+        {current_data_json}
+
+        Conversation turn:
+        User: "{user_text}"
+        Assistant: "{assistant_text}"
+
+        Return only a JSON object with newly extracted or corrected fields. If nothing new was mentioned, return {{}}.
+    """,
     Client.ROOFING_ROCHESTER: """
         Extract any roofing appointment information from this conversation turn.
         Return ONLY a raw JSON object with fields that were clearly mentioned.
