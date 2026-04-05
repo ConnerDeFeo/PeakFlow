@@ -13,7 +13,7 @@ def incoming_call_route_personal():
     return incoming_call(
         websocket_url=f"wss://{SERVER_DOMAIN}/{Client.PERSONAL.value}/{WS}",
         welcome_greeting="Hello! I am an AI receptionist, how can I assist you today?",
-        voice_name="DODLEQrClDo8wCz460ld"
+        voice_name="kdnRe2koJdOK4Ovxn2DI"
     )
 
 @router.websocket(f"/{Client.PERSONAL.value}/{WS}")
