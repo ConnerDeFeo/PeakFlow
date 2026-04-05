@@ -35,4 +35,3 @@ class DynamoDB():
             "customer_phone_number": phone_number,
             **clean_data
         })
-        logger.info(f"Saved appointment data for {phone_number}: {clean_data}")

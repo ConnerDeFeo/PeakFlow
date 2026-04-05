@@ -1,6 +1,6 @@
 import json
 import logging
-from config import EXTRACTION_PROMPTS, TABLES, Client, bedrock
+from config import EXTRACTION_PROMPTS, Client, bedrock
 from dynamo import DynamoDB
 from config import EXTRACTION_MODEL
 
@@ -50,8 +50,6 @@ async def run_extraction(
             if raw_text.startswith("json"):
                 raw_text = raw_text[4:]
             raw_text = raw_text.strip()
-
-        logger.debug(f"Extraction result: {raw_text}")
 
         if not raw_text or raw_text == "{}":
             return

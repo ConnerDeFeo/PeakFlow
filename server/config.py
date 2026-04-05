@@ -151,6 +151,5 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
         Assistant: "{assistant_text}"
 
         Return only a JSON object with newly extracted or corrected fields. If nothing new was mentioned, return {{}}.
-    """,
-    Client.PERSONAL: ""
+    """
 }
