@@ -6,3 +6,5 @@
 **/*.tfvars
 **/.terraformrc
 **/terraform.rc
+token.json
+.env

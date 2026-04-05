@@ -101,6 +101,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
     """
 }
 
+# Needs current_data_json, user_text, assistant_text, and appointment_booked_indicator variables
 EXTRACTION_PROMPTS: dict[Client, str] = {
     Client.PERSONAL: """
         Extract any appointment information from this conversation turn.
