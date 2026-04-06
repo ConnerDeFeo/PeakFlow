@@ -15,11 +15,12 @@ logger = logging.getLogger(__name__)
 async def test_calendar():
     now = datetime.now(ZoneInfo("America/New_York"))
     current_date = now.strftime("%A, %B %d, %Y %I:%M %p %Z")
-    start = (current_date + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
+    start = (now + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
     one_week = start + timedelta(weeks=1)
     available_dates = get_available_time_slots(start, one_week)
     
     return {
+        "current_date": current_date,
         "events": available_dates
     }
 
