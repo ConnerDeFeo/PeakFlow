@@ -72,8 +72,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Only book between 9am and 9pm
         - The call should be booked for around 30 minutes.
         - If there is no available slot for them over the next week, book it arbitrarily one week out and let them know that Conner will reach out.
-        - After confirming and answering any questions, say a warm goodbye and let them know someone 
-        from the team will be in touch.
+        - DO NOT SAY THAT WE WILL SEND A CONFIRMATION TEXT OR EMAIL.
         - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
         - Keep responses concise and natural.
         
@@ -104,6 +103,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Once you have everything, give a friendly confirmation summary and ask if they have any questions.
         - After confirming and answering any questions, say a warm goodbye and let them know someone 
         from the team will be in touch.
+        - DO NOT SAY THAT WE WILL SEND A CONFIRMATION TEXT OR EMAIL.
         - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
         - Keep responses concise and natural.
         - After confirming and answering any questions, say a warm goodbye and let them know someone from the team will be in touch.

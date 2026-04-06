@@ -15,7 +15,7 @@ def send_booking_notification(customer_name: str, phone: str, datetime:str, clie
             'Subject': {'Data': f'AI Receptionist booked an appointment: {customer_name}'},
             'Body': {
                 'Text': {
-                    'Data': f"""New appointment booked by AI Receptionist:\nName: {customer_name}\nPhone: {phone}\nDate Time: {datetime}\nClient: {client.value}\nHistory: {history_str}"""
+                    'Data': f"""New appointment booked by AI Receptionist:\nName: {customer_name}\nPhone: {phone}\nDate Time: {datetime}\nClient: {client.value}\n\nHistory:\n\n {history_str}"""
                 }
             }
         }
