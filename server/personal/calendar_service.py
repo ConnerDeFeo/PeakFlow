@@ -2,9 +2,10 @@
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
-from datetime import datetime, timedelta
+from dotenv import load_dotenv
 import os
 
+load_dotenv()
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 TOKEN_PATH = os.getenv("GOOGLE_TOKEN_PATH", "token.json")
 
