@@ -1,3 +1,5 @@
+from datetime import datetime
+from zoneinfo import ZoneInfo
 import json
 import logging
 from config import EXTRACTION_PROMPTS, Client, bedrock
@@ -9,10 +11,12 @@ logger = logging.getLogger(__name__)
 
 def get_extraction_prompt(user_text: str, assistant_text: str, current_data: dict, prompt: str) -> str:
     current_data_json = json.dumps(current_data, indent=2)
+    current_date = datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d %H:%M:%S %Z")
     variables = {
         "user_text": user_text,
         "assistant_text": assistant_text,
-        "current_data_json": current_data_json
+        "current_data_json": current_data_json,
+        "current_date": current_date
     }
     return prompt.format_map(variables)
 

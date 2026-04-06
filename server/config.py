@@ -128,6 +128,8 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
         }}
 
+        The current date is: {current_date}
+
         Guidelines: 
         - appointment_datetime_start should only be set if the user explicitly mentioned a date and time that works for them, 
         or if the assistant explicitly confirmed a date and time that works for them. Do not set it based on assumptions.
@@ -160,6 +162,8 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "roof_age": string,
             "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
         }}
+
+        The current date is: {current_date}
 
         Guidelines: 
         - appointment_datetime_start should only be set if the user explicitly mentioned a date and time that works for them AND the assistant confirmed it, 

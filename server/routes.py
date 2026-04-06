@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 import logging
+from zoneinfo import ZoneInfo
 from fastapi import APIRouter, WebSocket
 from config import INCOMING_CALL, WS, Client, SERVER_DOMAIN
 from incoming_call_handler import incoming_call
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 # Google Calendar routes
 @router.get("/test-calendar")
 async def test_calendar():
-    current_date = datetime.now(timezone.utc)
+    current_date = datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d %H:%M:%S %Z")
     start = (current_date + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
     one_week = start + timedelta(weeks=1)
     available_dates = get_available_time_slots(start, one_week)
@@ -32,7 +33,7 @@ def incoming_call_route_personal():
 
 @router.websocket(f"/{Client.PERSONAL.value}/{WS}")
 async def websocket_route_personal(websocket: WebSocket):
-    current_date = datetime.now(timezone.utc)
+    current_date = datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d %H:%M:%S %Z") 
     start = (current_date + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
     one_week = start + timedelta(weeks=1)
     available_time_slots = get_available_time_slots(start, one_week)
