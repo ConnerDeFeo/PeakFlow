@@ -88,7 +88,10 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                         word_count = len(assistant_text.split())
                         speak_time = max(5, (word_count / 160) * 60)
                         await asyncio.sleep(speak_time)
-                        await websocket.send_text(json.dumps({"type": "end"}))
+                        try:
+                            await websocket.send_text(json.dumps({"type": "end"}))
+                        except:
+                            logger.warning("Failed to send 'end' message over WebSocket (likely already closed)")
 
                         if client == Client.PERSONAL and appointment_data.get("appointment_datetime_start"):
                             from personal.calendar_service import book_google_calendar_appointment
