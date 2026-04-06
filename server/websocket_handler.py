@@ -6,7 +6,7 @@ from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA, Clien
 from dynamo import DynamoDB
 from conversation import stream_conversation
 from extraction import run_extraction
-from server.email_service import send_booking_notification
+from email_service import send_booking_notification
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
