@@ -128,8 +128,11 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
         }}
 
-        NOTE: appointment_datetime_end can be inferred as 30 minutes after appointment_datetime_start.
-
+        Guidelines: 
+        - appointment_datetime_start should only be set if the user explicitly mentioned a date and time that works for them, 
+        or if the assistant explicitly confirmed a date and time that works for them. Do not set it based on assumptions.
+        - appointment_datetime_end can be inferred as 30 minutes after appointment_datetime_start.
+        
         Current data already collected (do not re-extract unless corrected):
         {current_data_json}
 
@@ -158,7 +161,10 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
         }}
 
-        NOTE: appointment_datetime_end can be inferred as 2 hours after appointment_datetime_start.
+        Guidelines: 
+        - appointment_datetime_start should only be set if the user explicitly mentioned a date and time that works for them, 
+        or if the assistant explicitly confirmed a date and time that works for them. Do not set it based on assumptions.
+        - appointment_datetime_end can be inferred as 2 hours after appointment_datetime_start.
 
         Current data already collected (do not re-extract unless corrected):
         {current_data_json}
