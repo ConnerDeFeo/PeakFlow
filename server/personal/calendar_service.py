@@ -1,5 +1,5 @@
 # calendar_service.py
-from datetime import timedelta
+from datetime import datetime, timedelta
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
@@ -19,7 +19,7 @@ def get_calendar_service():
             f.write(creds.to_json())
     return build("calendar", "v3", credentials=creds)
 
-def get_available_dates(time_min, time_max):
+def get_available_time_slots(time_min, time_max):
     service = get_calendar_service()
     
     events_result = service.events().list(
@@ -37,15 +37,15 @@ def get_available_dates(time_min, time_max):
         end = event.get("end").get("dateTime").split("T")
         date = start[0]
 
-        if date not in res:
-            res[date] = []
-        
-        res[date].append({
-            "start": start[1].split('-')[0],
-            "end": end[1].split('-')[0]
-        })
+        start = datetime.strptime("09:00", "%H:%M")
+        end = datetime.strptime("21:00", "%H:%M")
 
-    return res
+        current = start
+        while current <= end:
+            print(current.strftime("%H:%M"))
+            current += timedelta(minutes=30)
+
+    return events
 
 def book_google_calendar_appointment(dt, summary, duration_minutes=60, description=""):
     service = get_calendar_service()
