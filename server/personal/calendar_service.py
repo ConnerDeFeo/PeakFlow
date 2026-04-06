@@ -56,16 +56,20 @@ def get_available_time_slots(time_min, time_max):
     # any slot that doesn't overlap a busy block. Overlap condition:
     # slot starts before the block ends AND slot ends after the block starts.
     avail = {}
-    for date, busy in taken.items():
+    current_date = time_min.date()
+    end_date = time_max.date()
+    while current_date <= end_date:
+        busy = taken.get(current_date, [])
         slots = []
-        current = datetime.combine(date, time(9, 0))
+        current = datetime.combine(current_date, time(9, 0))
         while current.time() <= time(21, 0):
             slot_start = current.time()
             slot_end = (current + timedelta(minutes=30)).time()
             if not any(slot_start < e and slot_end > s for s, e in busy):
                 slots.append({"start": str(slot_start), "end": str(slot_end)})
             current += timedelta(minutes=30)
-        avail[str(date)] = slots
+        avail[str(current_date)] = slots
+        current_date += timedelta(days=1)
 
     return avail
 
