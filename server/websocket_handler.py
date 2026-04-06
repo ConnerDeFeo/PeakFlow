@@ -100,7 +100,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                             try:
                                 dt = parser.parse(appointment_data["appointment_datetime_start"])
                                 summary = f"AI Receptionist Appointment with {appointment_data.get('company', 'Unknown Company')}"
-                                description = f"Caller's Name: {appointment_data.get('first_name', '')} {appointment_data.get('last_name', '')}"
+                                description = f"Caller's Name: {appointment_data.get('first_name', '')} {appointment_data.get('last_name', '')} \n Phone: {phone_number}"
                                 book_google_calendar_appointment(dt, summary, description=description)
                             except Exception as e:
                                 logger.warning(f"Failed to book Google Calendar appointment: {e}")
