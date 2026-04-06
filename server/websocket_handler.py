@@ -85,16 +85,12 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                     ))
 
                     if appointment_booked:
-                        logger.info(f"Appointment booked detected for call_sid: {call_sid}")
                         word_count = len(assistant_text.split())
                         speak_time = max(5, (word_count / 160) * 60)
-                        logger.debug(f"Word count: {word_count}, speak time: {speak_time}s")
                         await asyncio.sleep(speak_time)
                         await websocket.send_text(json.dumps({"type": "end"}))
-                        logger.debug("End message sent to websocket")
 
                         if client == Client.PERSONAL and appointment_data.get("appointment_datetime_start"):
-                            logger.debug(f"Attempting to book Google Calendar for client: {client}")
                             from personal.calendar_service import book_google_calendar_appointment
                             from dateutil import parser
 
@@ -102,9 +98,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                                 dt = parser.parse(appointment_data["appointment_datetime_start"])
                                 summary = f"AI Receptionist Appointment with {appointment_data.get('company', 'Unknown Company')}"
                                 description = f"Caller's Name: {appointment_data.get('first_name', '')} {appointment_data.get('last_name', '')}"
-                                logger.debug(f"Booking calendar event: {summary} at {dt}")
                                 book_google_calendar_appointment(dt, summary, description=description)
-                                logger.info(f"Successfully booked Google Calendar appointment for call_sid: {call_sid}")
                             except Exception as e:
                                 logger.warning(f"Failed to book Google Calendar appointment: {e}")
                         break
