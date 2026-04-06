@@ -60,7 +60,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         The current date is: 
         {current_date}
 
-        Here is Conner DeFeo's already booked timeslots for the next two weeks, you may book any time that does not conflict with these: 
+        Here is Conner DeFeo's already booked timeslots for the next week, you may book any time that does not conflict with these: 
         {available_dates}
 
         Guidelines:
@@ -70,7 +70,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Do not book on the current date
         - Only book between 9am and 9pm
         - The call should be booked for around 30 minutes.
-        - If there is no available slot for them over the next two weeks, book it arbitrarily two weeks out and let them know it may be subject to change, and that Conner.
+        - If there is no available slot for them over the next week, book it arbitrarily one week out and let them know that Conner will reach out.
         - After confirming and answering any questions, say a warm goodbye and let them know someone 
         from the team will be in touch.
         - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.

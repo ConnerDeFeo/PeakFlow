@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 async def test_calendar():
     current_date = datetime.now(timezone.utc)
     start = current_date + timedelta(days=1)
-    two_weeks = start + timedelta(weeks=2)
-    available_dates = get_available_time_slots(start, two_weeks)
+    one_week = start + timedelta(weeks=1)
+    available_dates = get_available_time_slots(start, one_week)
     
     return {
         "events": available_dates
@@ -34,8 +34,8 @@ def incoming_call_route_personal():
 async def websocket_route_personal(websocket: WebSocket):
     current_date = datetime.now(timezone.utc)
     start = current_date + timedelta(days=1)
-    two_weeks = start + timedelta(weeks=2)
-    available_dates = get_available_time_slots(start, two_weeks)
+    one_week = start + timedelta(weeks=1)
+    available_dates = get_available_time_slots(start, one_week)
     await websocket_handler(websocket, Client.PERSONAL, current_date=current_date, available_dates = available_dates)
 
 # Roofing Rochester routes
