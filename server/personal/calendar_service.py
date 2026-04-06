@@ -67,7 +67,7 @@ def get_available_time_slots(time_min, time_max):
             current += timedelta(minutes=30)
         avail[str(date)] = slots
 
-    return avail, taken
+    return events_result
 
 
 def book_google_calendar_appointment(dt, summary, duration_minutes=60, description=""):
