@@ -94,17 +94,29 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                         except:
                             logger.warning("Failed to send 'end' message over WebSocket (likely already closed)")
 
-                        if client == Client.PERSONAL and appointment_data.get("appointment_datetime_start"):
+                        appointment_datetime_start = appointment_data.get("appointment_datetime_start") 
+                        callers_name = f"{appointment_data.get('first_name', '')} {appointment_data.get('last_name', '')}".strip()
+
+                        if client == Client.PERSONAL and appointment_datetime_start:
                             from personal.calendar_service import book_google_calendar_appointment
                             from dateutil import parser
 
                             try:
-                                dt = parser.parse(appointment_data["appointment_datetime_start"])
+                                dt = parser.parse(appointment_datetime_start)
                                 summary = f"AI Receptionist Appointment with {appointment_data.get('company', 'Unknown Company')}"
-                                description = f"Caller's Name: {appointment_data.get('first_name', '')} {appointment_data.get('last_name', '')} \n Phone: {phone_number}"
+                                description = f"Caller's Name: {callers_name} \n Phone: {phone_number}"
                                 book_google_calendar_appointment(dt, summary, description=description)
                             except Exception as e:
                                 logger.warning(f"Failed to book Google Calendar appointment: {e}")
+                        
+                        send_booking_notification(
+                            customer_name=callers_name,
+                            phone=phone_number,
+                            datetime=appointment_datetime_start,
+                            client=client,
+                            history=history
+                        )
+                        
                         break
 
                 finally:
@@ -123,12 +135,3 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
         except RuntimeError:
             logger.debug("WebSocket already closed (RuntimeError suppressed)")
             pass
-    appointment_data = dynamo.get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
-    send_booking_notification(
-        customer_name=f"{appointment_data.get('first_name', '')} {appointment_data.get('last_name', '')}",
-        phone=phone_number,
-        date=appointment_data.get("appointment_datetime_start", ""),
-        time=appointment_data.get("appointment_datetime_start", ""),
-        client=client,
-        history=history
-    )

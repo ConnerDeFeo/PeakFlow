@@ -1,6 +1,6 @@
 from config import Client, ses
 
-def send_booking_notification(customer_name: str, phone: str, date: str, time: str, client: Client, history: list[dict]):
+def send_booking_notification(customer_name: str, phone: str, datetime:str, client: Client, history: list[dict]):
     # Convert history to string readable format for the email
     history_str = ""
     for turn in history:
@@ -20,8 +20,7 @@ def send_booking_notification(customer_name: str, phone: str, date: str, time: s
 
                         Name: {customer_name}
                         Phone: {phone}
-                        Date: {date}
-                        Time: {time}
+                        Date Time: {datetime}
                         Client: {client}
                         History: {history_str}
                     '''
