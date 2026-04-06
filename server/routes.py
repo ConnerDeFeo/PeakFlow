@@ -3,7 +3,7 @@ import logging
 from fastapi import APIRouter, WebSocket
 from config import INCOMING_CALL, WS, Client, SERVER_DOMAIN
 from incoming_call_handler import incoming_call
-from personal.calendar_service import get_available_dates
+from personal.calendar_service import get_available_dates, get_available_slots
 from websocket_handler import websocket_handler
 
 router = APIRouter()
@@ -16,6 +16,7 @@ async def test_calendar():
     start = current_date + timedelta(days=1)
     two_weeks = start + timedelta(weeks=2)
     available_dates = get_available_dates(start, two_weeks)
+    available_slots = get_available_slots(available_dates.get("2024-06-20", []), "2024-06-20")
     
     return {
         "events": available_dates
