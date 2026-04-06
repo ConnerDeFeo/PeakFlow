@@ -1,5 +1,5 @@
 # calendar_service.py
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, time, timedelta
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
@@ -19,33 +19,27 @@ def get_calendar_service():
             f.write(creds.to_json())
     return build("calendar", "v3", credentials=creds)
 
-def get_available_dates(time_min, time_max):
-    service = get_calendar_service()
-    
-    events_result = service.events().list(
-        calendarId="primary",
-        singleEvents=True,
-        orderBy="startTime",
-        timeMin=time_min.isoformat(),
-        timeMax=time_max.isoformat()
-    ).execute()
-    
-    events = events_result.get("items", [])
-    res = {}
-    for event in events:
-        start = event.get("start").get("dateTime").split("T")
-        end = event.get("end").get("dateTime").split("T")
-        date = start[0]
+def get_available_slots(busy_blocks: list, date: str, slot_duration=30, start_hour=9, end_hour=21):
+    available = []
+    current = datetime.combine(datetime.fromisoformat(date), time(start_hour, 0))
+    end_of_day = datetime.combine(datetime.fromisoformat(date), time(end_hour, 0))
 
-        if date not in res:
-            res[date] = []
-        
-        res[date].append({
-            "start": start[1].split('-')[0],
-            "end": end[1].split('-')[0]
-        })
+    busy_ranges = [
+        (
+            datetime.combine(datetime.fromisoformat(date), datetime.strptime(b["start"], "%H:%M:%S").time()),
+            datetime.combine(datetime.fromisoformat(date), datetime.strptime(b["end"], "%H:%M:%S").time()),
+        )
+        for b in busy_blocks
+    ]
 
-    return res
+    while current + timedelta(minutes=slot_duration) <= end_of_day:
+        slot_end = current + timedelta(minutes=slot_duration)
+        conflict = any(s < slot_end and e > current for s, e in busy_ranges)
+        if not conflict:
+            available.append(current.strftime("%-I:%M %p"))
+        current += timedelta(minutes=slot_duration)
+
+    return available
 
 def book_google_calendar_appointment(dt, summary, duration_minutes=60, description=""):
     service = get_calendar_service()
