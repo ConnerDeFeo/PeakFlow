@@ -34,16 +34,18 @@ def get_available_time_slots(time_min, time_max):
     ).execute()
     
     events = events_result.get("items", [])
+    taken = {}
     avail = {}
     for event in events:
         start = event.get("start").get("dateTime").split("T")
         end = event.get("end").get("dateTime").split("T")
         date = start[0]
 
-        if date not in avail:
+        if date not in taken:
+            taken[date] = []
             avail[date] = []
         
-        avail[date].append({
+        taken[date].append({
             "start": start[1].split('-')[0],
             "end": end[1].split('-')[0]
         })
@@ -52,8 +54,23 @@ def get_available_time_slots(time_min, time_max):
         end = datetime.strptime("21:00", "%H:%M")
 
         current = start
+        # For each possible time slot, check if it overlaps with any existing events
         while current <= end:
-            logger.info(current.strftime("%H:%M"))
+            slot_start = current.time()
+            slot_end = (current + timedelta(minutes=30)).time()
+            overlap = False
+            for event in taken.get(date, []):
+                event_start = datetime.strptime(event["start"], "%H:%M:%S").time()
+                event_end = datetime.strptime(event["end"], "%H:%M:%S").time()
+                if (slot_start < event_end and slot_end > event_start):
+                    overlap = True
+                    break
+            if not overlap:
+                avail[date].append({
+                    "start": slot_start.strftime("%H:%M:%S"),
+                    "end": slot_end.strftime("%H:%M:%S")
+                })
+
             current += timedelta(minutes=30)
 
     return avail
