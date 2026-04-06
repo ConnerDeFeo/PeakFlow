@@ -10,7 +10,7 @@ from extraction import run_extraction
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-async def websocket_handler(websocket: WebSocket, client: Client):
+async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
     await websocket.accept()
     call_sid = None
     phone_number = None
@@ -43,7 +43,7 @@ async def websocket_handler(websocket: WebSocket, client: Client):
                     history.append({"role": "user", "content": user_text})
 
                     # Stream conversational response to Twilio
-                    stream_response = stream_conversation(history, appointment_data, client)
+                    stream_response = stream_conversation(history, appointment_data, client, **kwargs)
 
                     full_reply = []
                     token_count = 0

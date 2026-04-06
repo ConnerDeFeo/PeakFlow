@@ -1,9 +1,9 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import logging
 from fastapi import APIRouter, WebSocket
 from config import INCOMING_CALL, WS, Client, SERVER_DOMAIN
 from incoming_call_handler import incoming_call
-from personal.calendar_service import get_calendar_service
+from personal.calendar_service import get_available_dates
 from websocket_handler import websocket_handler
 
 router = APIRouter()
@@ -12,20 +12,12 @@ logger = logging.getLogger(__name__)
 # Google Calendar routes
 @router.get("/test-calendar")
 async def test_calendar():
-    service = get_calendar_service()
-    
-    events_result = service.events().list(
-        calendarId="primary",
-        maxResults=10,
-        singleEvents=True,
-        orderBy="startTime",
-        timeMin=datetime.now(timezone.utc).isoformat()
-    ).execute()
-    
-    events = events_result.get("items", [])
+    current_date = datetime.now(timezone.utc)
+    two_weeks = current_date + timedelta(weeks=2)
+    available_dates = get_available_dates(current_date, two_weeks)
     
     return {
-        "events": events
+        "events": available_dates
     }
 
 # Personal routes
@@ -39,7 +31,10 @@ def incoming_call_route_personal():
 
 @router.websocket(f"/{Client.PERSONAL.value}/{WS}")
 async def websocket_route_personal(websocket: WebSocket):
-    await websocket_handler(websocket, Client.PERSONAL)
+    current_date = datetime.now(timezone.utc)
+    two_weeks = current_date + timedelta(weeks=2)
+    available_dates = get_available_dates(current_date, two_weeks)
+    await websocket_handler(websocket, Client.PERSONAL, current_date=current_date, available_dates = available_dates)
 
 # Roofing Rochester routes
 @router.post(f"/{Client.ROOFING_ROCHESTER.value}/{INCOMING_CALL}")
