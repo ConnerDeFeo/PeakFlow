@@ -1,5 +1,5 @@
 # calendar_service.py
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 import logging
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
@@ -23,8 +23,14 @@ def get_calendar_service():
     return build("calendar", "v3", credentials=creds)
 
 def get_available_time_slots(time_min, time_max):
+    """Return free 30-minute slots between 09:00–21:00 for each date in the range.
+
+    Returns:
+        dict[str, list[dict]]: {"YYYY-MM-DD": [{"start": "HH:MM:SS", "end": "HH:MM:SS"}, ...]}
+    """
     service = get_calendar_service()
-    
+
+    # Fetch events in the range; singleEvents=True expands recurring events into instances
     events_result = service.events().list(
         calendarId="primary",
         singleEvents=True,
@@ -32,48 +38,39 @@ def get_available_time_slots(time_min, time_max):
         timeMin=time_min.isoformat(),
         timeMax=time_max.isoformat()
     ).execute()
-    
-    events = events_result.get("items", [])
-    taken = {}
-    avail = {}
-    for event in events:
-        start = event.get("start").get("dateTime").split("T")
-        end = event.get("end").get("dateTime").split("T")
-        date = start[0]
 
+    # Pass 1: group busy (start, end) time pairs by date.
+    # Events without a dateTime (i.e. all-day events) are skipped.
+    taken = {}
+    for event in events_result.get("items", []):
+        start = event.get("start", {}).get("dateTime")
+        end = event.get("end", {}).get("dateTime")
+        if not start or not end:
+            continue  # skip all-day events
+        start_dt = datetime.fromisoformat(start)
+        end_dt = datetime.fromisoformat(end)
+        date = start_dt.date()
         if date not in taken:
             taken[date] = []
-            avail[date] = []
-        
-        taken[date].append({
-            "start": start[1].split('-')[0],
-            "end": end[1].split('-')[0]
-        })
+        taken[date].append((start_dt.time(), end_dt.time()))
 
-        start = datetime.strptime("09:00", "%H:%M")
-        end = datetime.strptime("21:00", "%H:%M")
-
-        current = start
-        # For each possible time slot, check if it overlaps with any existing events
-        while current <= end:
+    # Pass 2: for each date, walk 09:00–21:00 in 30-minute steps and keep
+    # any slot that doesn't overlap a busy block. Overlap condition:
+    # slot starts before the block ends AND slot ends after the block starts.
+    avail = {}
+    for date, busy in taken.items():
+        slots = []
+        current = datetime.combine(date, time(9, 0))
+        while current.time() <= time(21, 0):
             slot_start = current.time()
             slot_end = (current + timedelta(minutes=30)).time()
-            overlap = False
-            for event in taken.get(date, []):
-                event_start = datetime.strptime(event["start"], "%H:%M:%S").time()
-                event_end = datetime.strptime(event["end"], "%H:%M:%S").time()
-                if (slot_start < event_end and slot_end > event_start):
-                    overlap = True
-                    break
-            if not overlap:
-                avail[date].append({
-                    "start": slot_start.strftime("%H:%M:%S"),
-                    "end": slot_end.strftime("%H:%M:%S")
-                })
-
+            if not any(slot_start < e and slot_end > s for s, e in busy):
+                slots.append({"start": str(slot_start), "end": str(slot_end)})
             current += timedelta(minutes=30)
+        avail[str(date)] = slots
 
     return avail
+
 
 def book_google_calendar_appointment(dt, summary, duration_minutes=60, description=""):
     service = get_calendar_service()
