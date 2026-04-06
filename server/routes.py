@@ -6,7 +6,6 @@ from config import INCOMING_CALL, WS, Client, SERVER_DOMAIN
 from incoming_call_handler import incoming_call
 from personal.calendar_service import get_available_time_slots
 from websocket_handler import websocket_handler
-from dateservice import get_current_date
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
