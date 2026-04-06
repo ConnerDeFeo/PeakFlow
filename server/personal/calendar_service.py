@@ -36,8 +36,8 @@ def get_available_dates(time_min, time_max):
         "events": [
             {
                 "summary": e.get("summary"),
-                "start": e.get("start"),
-                "end": e.get("end"),
+                "start": e.get("start").get("dateTime"),
+                "end": e.get("end").get("dateTime"),
             }
             for e in events
         ]
