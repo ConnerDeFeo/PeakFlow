@@ -70,13 +70,14 @@ def get_available_time_slots(time_min, time_max):
     return avail
 
 
-def book_google_calendar_appointment(dt, summary, duration_minutes=60, description=""):
+def book_google_calendar_appointment(dt, summary, duration_minutes=30, description=""):
     service = get_calendar_service()
     end_dt = dt + timedelta(minutes=duration_minutes)
     
     event = {
         "summary": summary,
         "description": description,
+        "colorId": "2",
         "start": {
             "dateTime": dt.isoformat(),
             "timeZone": "UTC"
