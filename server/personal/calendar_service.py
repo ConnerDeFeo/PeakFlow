@@ -31,19 +31,14 @@ def get_available_dates(time_min, time_max):
     ).execute()
     
     events = events_result.get("items", [])
-    res = {}
-    for event in events:
-        start = event.get("start").get("dateTime").split("T")
-        end = event.get("end").get("dateTime").split("T")
-        date = start[0]
-
-        if date not in res:
-            res[date] = []
-        
-        res[date].append({
-            "summary": event.get("summary"),
-            "start": start[1],
-            "end": end[1]
-        })
-
-    return res
+    
+    return {
+        "events": [
+            {
+                "summary": e.get("summary"),
+                "start": e.get("start").get("dateTime"),
+                "end": e.get("end").get("dateTime"),
+            }
+            for e in events
+        ]
+    }
