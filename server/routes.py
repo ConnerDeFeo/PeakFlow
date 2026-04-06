@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 async def test_calendar():
     current_date = datetime.now(timezone.utc)
     start = current_date + timedelta(days=1)
-    two_weeks = current_date + timedelta(weeks=2)
+    two_weeks = start + timedelta(weeks=2)
     available_dates = get_available_dates(start, two_weeks)
     
     return {
@@ -34,7 +34,7 @@ def incoming_call_route_personal():
 async def websocket_route_personal(websocket: WebSocket):
     current_date = datetime.now(timezone.utc)
     start = current_date + timedelta(days=1)
-    two_weeks = current_date + timedelta(weeks=2)
+    two_weeks = start + timedelta(weeks=2)
     available_dates = get_available_dates(start, two_weeks)
     await websocket_handler(websocket, Client.PERSONAL, current_date=current_date, available_dates = available_dates)
 
