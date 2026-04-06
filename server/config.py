@@ -60,7 +60,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         The current date is: 
         {current_date}
 
-        Here is Conner DeFeo's schedule for the next two weeks including already booked timeslots: 
+        Here is Conner DeFeo's already booked timeslots for the next two weeks, you may book any time that does not conflict with these: 
         {available_dates}
 
         Guidelines:
@@ -69,6 +69,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Only ask one question at a time. Do not move on to the next question until you get a clear answer to the current one.
         - Do not book on the current date
         - Only book between 8am and 9pm
+        - The call should be around 30 minutes long, so book a 45 minute slot to give some buffer.
         - If there is no available slot for them over the next two weeks, book it arbitrarily two weeks out and let them know it may be subject to change, and that Conner.
         - After confirming and answering any questions, say a warm goodbye and let them know someone 
         from the team will be in touch.
