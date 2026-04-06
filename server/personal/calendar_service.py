@@ -46,13 +46,11 @@ def get_available_time_slots(time_min, time_max):
         start = event.get("start", {}).get("dateTime")
         end = event.get("end", {}).get("dateTime")
         if not start or not end:
-            continue  # skip all-day events
-        start_dt = datetime.fromisoformat(start)
-        end_dt = datetime.fromisoformat(end)
+            continue
+        start_dt = datetime.fromisoformat(start).replace(tzinfo=None)
+        end_dt = datetime.fromisoformat(end).replace(tzinfo=None)
         date = start_dt.date()
-        if date not in taken:
-            taken[date] = []
-        taken[date].append((start_dt.time(), end_dt.time()))
+        taken.setdefault(date, []).append((start_dt.time(), end_dt.time()))
 
     # Pass 2: for each date, walk 09:00–21:00 in 30-minute steps and keep
     # any slot that doesn't overlap a busy block. Overlap condition:
