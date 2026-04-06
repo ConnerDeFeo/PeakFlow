@@ -41,7 +41,6 @@ def get_available_dates(time_min, time_max):
             res[date] = []
         
         res[date].append({
-            "summary": event.get("summary"),
             "start": start[1],
             "end": end[1]
         })

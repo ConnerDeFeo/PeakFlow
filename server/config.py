@@ -60,7 +60,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         The current date is: 
         {current_date}
 
-        Here are Conner's available dates over the next two weeks for reference: 
+        Here is Conner DeFeo's schedule for the next two weeks including already booked timeslots: 
         {available_dates}
 
         Guidelines:
