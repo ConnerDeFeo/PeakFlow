@@ -21,6 +21,7 @@ async def test_calendar():
     
     return {
         "current_date": current_date,
+        "start": start.isoformat(),
         "events": available_dates
     }
 
