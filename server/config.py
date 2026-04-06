@@ -27,14 +27,14 @@ DEFAULT_APPOINTMENT_DATA: dict[Client, dict[str, None]] = {
         "first_name": None,
         "last_name": None,
         "company": None,
-        "appointment_date": None
+        "appointment_datetime": None
     },
     Client.ROOFING_ROCHESTER: {
         "first_name": None,
         "last_name": None,
         "address": None,
         "appointment_type": None,
-        "appointment_date": None,
+        "appointment_datetime": None,
         "homeowners_present": None,
         "attic_access": None,
         "roof_age": None
@@ -122,7 +122,7 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "first_name": string,
             "last_name": string,
             "company": string,
-            "appointment_date": string,
+            "appointment_datetime": string,
             "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
         }}
 
@@ -146,7 +146,7 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "last_name": string,
             "address": string,
             "appointment_type": "repair" or "replacement",
-            "appointment_date": string,
+            "appointment_datetime": string,
             "homeowners_present": "yes", "no", or "N/A" for repairs,
             "attic_access": "yes", "no", or "crawl space",
             "roof_age": string,
