@@ -41,8 +41,8 @@ def get_available_dates(time_min, time_max):
             res[date] = []
         
         res[date].append({
-            "start": start[1],
-            "end": end[1]
+            "start": start.split('-')[1],
+            "end": end.split('-')[1]
         })
 
     return res
