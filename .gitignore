@@ -8,3 +8,4 @@
 **/terraform.rc
 token.json
 .env
+__pycache__

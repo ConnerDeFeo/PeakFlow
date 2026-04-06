@@ -1,5 +1,6 @@
 # calendar_service.py
 from datetime import datetime, timedelta
+import logging
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
@@ -9,6 +10,8 @@ import os
 load_dotenv()
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 TOKEN_PATH = os.getenv("GOOGLE_TOKEN_PATH", "token.json")
+
+logger = logging.getLogger(__name__)
 
 def get_calendar_service():
     creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
@@ -50,7 +53,7 @@ def get_available_time_slots(time_min, time_max):
 
         current = start
         while current <= end:
-            print(current.strftime("%H:%M"))
+            logger.info(current.strftime("%H:%M"))
             current += timedelta(minutes=30)
 
     return avail
