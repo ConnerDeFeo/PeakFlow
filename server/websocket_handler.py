@@ -90,12 +90,12 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                         await asyncio.sleep(speak_time)
                         await websocket.send_text(json.dumps({"type": "end"}))
 
-                        if client == Client.PERSONAL and appointment_data.get("appointment_datetime"):
+                        if client == Client.PERSONAL and appointment_data.get("appointment_datetime_start"):
                             from personal.calendar_service import book_google_calendar_appointment
                             from dateutil import parser
 
                             try:
-                                dt = parser.parse(appointment_data["appointment_datetime"])
+                                dt = parser.parse(appointment_data["appointment_datetime_start"])
                                 summary = f"AI Receptionist Appointment with {appointment_data.get('company', 'Unknown Company')}"
                                 description = f"Caller's Name: {appointment_data.get('first_name', '')} {appointment_data.get('last_name', '')}"
                                 book_google_calendar_appointment(dt, summary, description=description)

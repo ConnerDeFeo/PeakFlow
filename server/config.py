@@ -27,14 +27,14 @@ DEFAULT_APPOINTMENT_DATA: dict[Client, dict[str, None]] = {
         "first_name": None,
         "last_name": None,
         "company": None,
-        "appointment_datetime": None
+        "appointment_datetime_start": None,
     },
     Client.ROOFING_ROCHESTER: {
         "first_name": None,
         "last_name": None,
         "address": None,
         "appointment_type": None,
-        "appointment_datetime": None,
+        "appointment_datetime_start": None,
         "homeowners_present": None,
         "attic_access": None,
         "roof_age": None
@@ -68,8 +68,8 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Collect information in this order: first and last name, company name, 
         - Only ask one question at a time. Do not move on to the next question until you get a clear answer to the current one.
         - Do not book on the current date
-        - Only book between 8am and 9pm
-        - The call should be around 30 minutes long, so book a 45 minute slot to give some buffer.
+        - Only book between 9am and 9pm
+        - The call should be booked for around 30 minutes.
         - If there is no available slot for them over the next two weeks, book it arbitrarily two weeks out and let them know it may be subject to change, and that Conner.
         - After confirming and answering any questions, say a warm goodbye and let them know someone 
         from the team will be in touch.
@@ -123,9 +123,12 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "first_name": string,
             "last_name": string,
             "company": string,
-            "appointment_datetime": string in iso format,
+            "appointment_datetime_start": string in iso format,
+            "appointment_datetime_end": string in iso format,
             "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
         }}
+
+        NOTE: appointment_datetime_end can be inferred as 30 minutes after appointment_datetime_start.
 
         Current data already collected (do not re-extract unless corrected):
         {current_data_json}
@@ -147,12 +150,15 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "last_name": string,
             "address": string,
             "appointment_type": "repair" or "replacement",
-            "appointment_datetime": string in iso format,
+            "appointment_datetime_start": string in iso format,
+            "appointment_datetime_end": string in iso format,
             "homeowners_present": "yes", "no", or "N/A" for repairs,
             "attic_access": "yes", "no", or "crawl space",
             "roof_age": string,
             "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
         }}
+
+        NOTE: appointment_datetime_end can be inferred as 2 hours after appointment_datetime_start.
 
         Current data already collected (do not re-extract unless corrected):
         {current_data_json}
