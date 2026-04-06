@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import logging
 from fastapi import APIRouter, WebSocket
 from config import INCOMING_CALL, WS, Client, SERVER_DOMAIN
@@ -12,8 +13,27 @@ logger = logging.getLogger(__name__)
 @router.get("/test-calendar")
 async def test_calendar():
     service = get_calendar_service()
-    calendar = service.calendars().get(calendarId="primary").execute()
-    return {"calendar": calendar["summary"]}
+    
+    events_result = service.events().list(
+        calendarId="primary",
+        maxResults=10,
+        singleEvents=True,
+        orderBy="startTime",
+        timeMin=datetime.now(timezone.utc).isoformat()
+    ).execute()
+    
+    events = events_result.get("items", [])
+    
+    return {
+        "events": [
+            {
+                "summary": e.get("summary"),
+                "start": e.get("start"),
+                "end": e.get("end"),
+            }
+            for e in events
+        ]
+    }
 
 # Personal routes
 @router.post(f"/{Client.PERSONAL.value}/{INCOMING_CALL}")
