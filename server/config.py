@@ -60,8 +60,8 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         The current date is: 
         {current_date}
 
-        Here is Conner DeFeo's already booked timeslots for the next week, you may book any time that does not conflict with these: 
-        {available_dates}
+        Here is Conner DeFeo's available time slots for the next week: 
+        {available_time_slots}
 
         Guidelines:
         - Speak naturally and conversationally, like a real receptionist on the phone.
