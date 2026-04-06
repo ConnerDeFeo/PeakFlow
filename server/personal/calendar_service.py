@@ -39,7 +39,7 @@ def get_available_time_slots(time_min, time_max):
         timeMax=time_max.isoformat()
     ).execute()
 
-    # Pass 1: group busy (start, end) time pairs by date.
+    # Group busy (start, end) time pairs by date.
     # Events without a dateTime (i.e. all-day events) are skipped.
     taken = {}
     for event in events_result.get("items", []):
@@ -52,7 +52,7 @@ def get_available_time_slots(time_min, time_max):
         date = start_dt.date()
         taken.setdefault(date, []).append((start_dt.time(), end_dt.time()))
 
-    # Pass 2: for each date, walk 09:00–21:00 in 30-minute steps and keep
+    # For each date, walk 09:00–21:00 in 30-minute steps and keep
     # any slot that doesn't overlap a busy block. Overlap condition:
     # slot starts before the block ends AND slot ends after the block starts.
     avail = {}
@@ -67,7 +67,7 @@ def get_available_time_slots(time_min, time_max):
             current += timedelta(minutes=30)
         avail[str(date)] = slots
 
-    return events_result
+    return avail
 
 
 def book_google_calendar_appointment(dt, summary, duration_minutes=60, description=""):
