@@ -9,18 +9,6 @@ from websocket_handler import websocket_handler
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-# Google Calendar routes
-@router.get("/test-calendar")
-async def test_calendar():
-    current_date = datetime.now(timezone.utc)
-    start = current_date + timedelta(days=1)
-    two_weeks = start + timedelta(weeks=2)
-    available_dates = get_available_dates(start, two_weeks)
-    
-    return {
-        "events": available_dates
-    }
-
 # Personal routes
 @router.post(f"/{Client.PERSONAL.value}/{INCOMING_CALL}")
 def incoming_call_route_personal():
