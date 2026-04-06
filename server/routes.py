@@ -2,10 +2,18 @@ import logging
 from fastapi import APIRouter, WebSocket
 from config import INCOMING_CALL, WS, Client, SERVER_DOMAIN
 from incoming_call_handler import incoming_call
+from personal.calendar_service import get_calendar_service
 from websocket_handler import websocket_handler
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
+
+# Google Calendar routes
+@router.get("/test-calendar")
+async def test_calendar():
+    service = get_calendar_service()
+    calendar = service.calendars().get(calendarId="primary").execute()
+    return {"calendar": calendar["summary"]}
 
 # Personal routes
 @router.post(f"/{Client.PERSONAL.value}/{INCOMING_CALL}")
