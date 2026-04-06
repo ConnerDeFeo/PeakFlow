@@ -46,3 +46,23 @@ def get_available_dates(time_min, time_max):
         })
 
     return res
+
+def book_google_calendar_appointment(dt, summary, duration_minutes=60, description=""):
+    service = get_calendar_service()
+    end_dt = dt + timedelta(minutes=duration_minutes)
+    
+    event = {
+        "summary": summary,
+        "description": description,
+        "start": {
+            "dateTime": dt.isoformat(),
+            "timeZone": "UTC"
+        },
+        "end": {
+            "dateTime": end_dt.isoformat(),
+            "timeZone": "UTC"
+        }
+    }
+    
+    created_event = service.events().insert(calendarId="primary", body=event).execute()
+    return created_event.get("id")
