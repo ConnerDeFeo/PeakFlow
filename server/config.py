@@ -122,7 +122,7 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "first_name": string,
             "last_name": string,
             "company": string,
-            "appointment_datetime": string,
+            "appointment_datetime": string in iso format,
             "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
         }}
 
@@ -146,7 +146,7 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "last_name": string,
             "address": string,
             "appointment_type": "repair" or "replacement",
-            "appointment_datetime": string,
+            "appointment_datetime": string in iso format,
             "homeowners_present": "yes", "no", or "N/A" for repairs,
             "attic_access": "yes", "no", or "crawl space",
             "roof_age": string,
