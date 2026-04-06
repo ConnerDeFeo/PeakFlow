@@ -6,6 +6,7 @@ twilio_conversations = dynamodb.Table("twilio_conversations")
 roofing_rochester_appointments = dynamodb.Table("roofing_rochester_appointments")
 personal_appointments = dynamodb.Table("personal_appointments")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
+ses = boto3.client('ses', region_name='us-east-2')
 
 SERVER_DOMAIN = "receptionist.connerdefeo.com"
 CONVERSATION_MODEL = EXTRACTION_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0"

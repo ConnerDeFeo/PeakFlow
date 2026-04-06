@@ -6,6 +6,7 @@ from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA, Clien
 from dynamo import DynamoDB
 from conversation import stream_conversation
 from extraction import run_extraction
+from server.email_service import send_booking_notification
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -122,3 +123,12 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
         except RuntimeError:
             logger.debug("WebSocket already closed (RuntimeError suppressed)")
             pass
+    appointment_data = dynamo.get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
+    send_booking_notification(
+        customer_name=f"{appointment_data.get('first_name', '')} {appointment_data.get('last_name', '')}",
+        phone=phone_number,
+        date=appointment_data.get("appointment_datetime_start", ""),
+        time=appointment_data.get("appointment_datetime_start", ""),
+        client=client,
+        history=history
+    )
