@@ -1,5 +1,6 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 import logging
+from zoneinfo import ZoneInfo
 from fastapi import APIRouter, WebSocket
 from config import INCOMING_CALL, WS, Client, SERVER_DOMAIN
 from incoming_call_handler import incoming_call
@@ -9,18 +10,6 @@ from dateservice import get_current_date
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
-
-# Google Calendar routes
-@router.get("/test-calendar")
-async def test_calendar():
-    current_date = get_current_date()
-    start = (current_date + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
-    one_week = start + timedelta(weeks=1)
-    available_dates = get_available_time_slots(start, one_week)
-    
-    return {
-        "events": available_dates
-    }
 
 # Personal routes
 @router.post(f"/{Client.PERSONAL.value}/{INCOMING_CALL}")
@@ -33,8 +22,9 @@ def incoming_call_route_personal():
 
 @router.websocket(f"/{Client.PERSONAL.value}/{WS}")
 async def websocket_route_personal(websocket: WebSocket):
-    current_date = get_current_date()
-    start = (current_date + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
+    now = datetime.now(ZoneInfo("America/New_York"))
+    current_date = now.strftime("%A, %B %d, %Y %I:%M %p %Z")
+    start = (now + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
     one_week = start + timedelta(weeks=1)
     available_time_slots = get_available_time_slots(start, one_week)
     await websocket_handler(websocket, Client.PERSONAL, current_date=current_date, available_time_slots=available_time_slots)
