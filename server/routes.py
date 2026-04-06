@@ -25,14 +25,7 @@ async def test_calendar():
     events = events_result.get("items", [])
     
     return {
-        "events": [
-            {
-                "summary": e.get("summary"),
-                "start": e.get("start"),
-                "end": e.get("end"),
-            }
-            for e in events
-        ]
+        "events": events
     }
 
 # Personal routes
