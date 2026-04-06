@@ -31,11 +31,19 @@ def get_available_time_slots(time_min, time_max):
     ).execute()
     
     events = events_result.get("items", [])
-    res = {}
+    avail = {}
     for event in events:
         start = event.get("start").get("dateTime").split("T")
         end = event.get("end").get("dateTime").split("T")
         date = start[0]
+
+        if date not in avail:
+            avail[date] = []
+        
+        avail[date].append({
+            "start": start[1].split('-')[0],
+            "end": end[1].split('-')[0]
+        })
 
         start = datetime.strptime("09:00", "%H:%M")
         end = datetime.strptime("21:00", "%H:%M")
@@ -45,7 +53,7 @@ def get_available_time_slots(time_min, time_max):
             print(current.strftime("%H:%M"))
             current += timedelta(minutes=30)
 
-    return events
+    return avail
 
 def book_google_calendar_appointment(dt, summary, duration_minutes=60, description=""):
     service = get_calendar_service()
