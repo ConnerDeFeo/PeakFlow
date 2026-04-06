@@ -6,24 +6,16 @@ def send_booking_notification(customer_name: str, phone: str, datetime:str, clie
     for turn in history:
         role = turn.get("role", "unknown").capitalize()
         content = turn.get("content", "")
-        history_str += f"{role}: {content}\n"
+        history_str += f"{role}: {content}\n\n"
 
     ses.send_email(
-        Source='jjd2843@rit.edu',
-        Destination={'ToAddresses': ['jjd2843@rit.edu']},
+        Source='ninjanerozz@gmail.com',
+        Destination={'ToAddresses': ['ninjanerozz@gmail.com']},
         Message={
             'Subject': {'Data': f'AI Receptionist booked an appointment: {customer_name}'},
             'Body': {
                 'Text': {
-                    'Data': f'''
-                        New appointment booked by AI Receptionist:
-
-                        Name: {customer_name}
-                        Phone: {phone}
-                        Date Time: {datetime}
-                        Client: {client}
-                        History: {history_str}
-                    '''
+                    'Data': f"""New appointment booked by AI Receptionist:\nName: {customer_name}\nPhone: {phone}\nDate Time: {datetime}\nClient: {client.value}\nHistory: {history_str}"""
                 }
             }
         }
