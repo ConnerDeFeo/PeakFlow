@@ -1,10 +1,12 @@
 import logging
+import os
 from fastapi import FastAPI
 from routes import router as twilio_router
 from dotenv import load_dotenv
 load_dotenv()
 
 load_dotenv()
+GOOGLE_TOKEN_PATH = os.getenv("GOOGLE_TOKEN_PATH")
 
 logging.basicConfig(
     level=logging.DEBUG,
