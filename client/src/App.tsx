@@ -196,38 +196,35 @@ function App() {
           }}
         />
         <div className="relative max-w-4xl mx-auto">
+          {/* Logo */}
           <div className="flex justify-center mb-8">
             <Logo size={88} />
           </div>
-          <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-6 border"
-            style={{ borderColor: NEON, color: NEON }}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: NEON, boxShadow: `0 0 6px ${NEON}` }}
-            />
-            AI Automation for Roofing Contractors
-          </div>
-          <h1 className="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight mb-6">
-            Your Roofing Business Deserves a<br />
-            <span style={{ color: NEON }}>Receptionist That Never Sleeps.</span>
+
+          <h1 className="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight mb-10">
+            A Receptionist <span style={{ color: NEON }}>That Never Sleeps.</span>
           </h1>
+
+          {/* Demo number — prominent, right below headline */}
+          <a
+            href="tel:3158733743"
+            className="group inline-flex flex-col items-center gap-1 mb-10"
+          >
+            <span className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-1">
+              Hear our AI receptionist — call right now
+            </span>
+            <span
+              className="text-4xl md:text-5xl font-black tracking-tight transition-opacity group-hover:opacity-80"
+              style={{ color: NEON, textShadow: `0 0 40px ${NEON_GLOW}` }}
+            >
+              315-873-3743
+            </span>
+          </a>
           <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
             PeakFlow's AI voice receptionist answers every call, qualifies every lead,
             and books appointments — 24/7, without you lifting a finger.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:3158733743"
-              className="px-8 py-4 rounded-full text-base font-bold text-black transition-opacity hover:opacity-90"
-              style={{
-                background: NEON,
-                boxShadow: `0 0 32px ${NEON_GLOW}`,
-              }}
-            >
-              Call Our AI: 315-873-3743 →
-            </a>
             <a
               href="#how-it-works"
               className="px-8 py-4 rounded-full text-base font-semibold border border-gray-700 text-gray-300 hover:border-gray-500 hover:text-white transition-colors"
