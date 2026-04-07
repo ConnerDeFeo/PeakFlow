@@ -1,4 +1,4 @@
-import { NEON, STEPS } from '../constants'
+import { NEON, STEPS } from '../../../constants'
 
 export function HowItWorks() {
   return (

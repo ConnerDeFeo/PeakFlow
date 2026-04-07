@@ -1,5 +1,5 @@
-import { Logo } from '../components/Logo'
-import { NEON, NEON_GLOW } from '../constants'
+import { Logo } from '../../../components/Logo'
+import { NEON, NEON_GLOW } from '../../../constants'
 
 export function ContactCTA() {
   return (

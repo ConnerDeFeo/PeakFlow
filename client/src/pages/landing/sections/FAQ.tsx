@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NEON, FAQS } from '../constants'
+import { NEON, FAQS } from '../../../constants'
 
 export function FAQ() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)

@@ -1,4 +1,4 @@
-import { NEON, SERVICES } from '../constants'
+import { NEON, SERVICES } from '../../../constants'
 
 export function Services() {
   return (

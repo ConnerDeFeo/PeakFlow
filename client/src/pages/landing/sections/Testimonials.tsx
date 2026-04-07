@@ -1,5 +1,5 @@
-import { Stars } from '../components/Stars'
-import { NEON, TESTIMONIALS } from '../constants'
+import { Stars } from '../../../components/Stars'
+import { NEON, TESTIMONIALS } from '../../../constants'
 
 export function Testimonials() {
   return (

@@ -1,5 +1,5 @@
-import { Logo } from '../components/Logo'
-import { NavLink } from '../components/NavLink'
+import { Logo } from './Logo'
+import { NavLink } from './NavLink'
 import { NEON } from '../constants'
 
 export function NavBar() {
