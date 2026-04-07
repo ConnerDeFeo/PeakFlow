@@ -6,6 +6,7 @@ twilio_conversations = dynamodb.Table("twilio_conversations")
 roofing_rochester_appointments = dynamodb.Table("roofing_rochester_appointments")
 personal_appointments = dynamodb.Table("personal_appointments")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
+ses = boto3.client('ses', region_name='us-east-2')
 
 SERVER_DOMAIN = "receptionist.connerdefeo.com"
 CONVERSATION_MODEL = EXTRACTION_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
@@ -60,8 +61,8 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         The current date is: 
         {current_date}
 
-        Here is Conner DeFeo's already booked timeslots for the next two weeks, you may book any time that does not conflict with these: 
-        {available_dates}
+        Here is Conner DeFeo's available time slots for the next week: 
+        {available_time_slots}
 
         Guidelines:
         - Speak naturally and conversationally, like a real receptionist on the phone.
@@ -70,9 +71,8 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Do not book on the current date
         - Only book between 9am and 9pm
         - The call should be booked for around 30 minutes.
-        - If there is no available slot for them over the next two weeks, book it arbitrarily two weeks out and let them know it may be subject to change, and that Conner.
-        - After confirming and answering any questions, say a warm goodbye and let them know someone 
-        from the team will be in touch.
+        - If there is no available slot for them over the next week, book it arbitrarily one week out and let them know that Conner will reach out.
+        - DO NOT SAY THAT WE WILL SEND A CONFIRMATION TEXT OR EMAIL.
         - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
         - Keep responses concise and natural.
         
@@ -103,6 +103,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Once you have everything, give a friendly confirmation summary and ask if they have any questions.
         - After confirming and answering any questions, say a warm goodbye and let them know someone 
         from the team will be in touch.
+        - DO NOT SAY THAT WE WILL SEND A CONFIRMATION TEXT OR EMAIL.
         - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
         - Keep responses concise and natural.
         - After confirming and answering any questions, say a warm goodbye and let them know someone from the team will be in touch.
@@ -128,9 +129,10 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
         }}
 
+        The current date is: {current_date}
+
         Guidelines: 
-        - appointment_datetime_start should only be set if the user explicitly mentioned a date and time that works for them, 
-        or if the assistant explicitly confirmed a date and time that works for them. Do not set it based on assumptions.
+        - appointment_datetime_start should only be set if the user explicitly mentioned a date and time AND the assistant confirmed it worked.
         - appointment_datetime_end can be inferred as 30 minutes after appointment_datetime_start.
         
         Current data already collected (do not re-extract unless corrected):
@@ -160,6 +162,8 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
             "roof_age": string,
             "appointment_booked": true only if assistant explicitly confirmed the booking and said goodbye
         }}
+
+        The current date is: {current_date}
 
         Guidelines: 
         - appointment_datetime_start should only be set if the user explicitly mentioned a date and time that works for them AND the assistant confirmed it, 

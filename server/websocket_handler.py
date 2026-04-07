@@ -6,6 +6,7 @@ from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA, Clien
 from dynamo import DynamoDB
 from conversation import stream_conversation
 from extraction import run_extraction
+from email_service import send_booking_notification
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -88,19 +89,34 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                         word_count = len(assistant_text.split())
                         speak_time = max(5, (word_count / 160) * 60)
                         await asyncio.sleep(speak_time)
-                        await websocket.send_text(json.dumps({"type": "end"}))
+                        try:
+                            await websocket.send_text(json.dumps({"type": "end"}))
+                        except:
+                            logger.warning("Failed to send 'end' message over WebSocket (likely already closed)")
 
-                        if client == Client.PERSONAL and appointment_data.get("appointment_datetime_start"):
+                        appointment_datetime_start = appointment_data.get("appointment_datetime_start") 
+                        callers_name = f"{appointment_data.get('first_name', '')} {appointment_data.get('last_name', '')}".strip()
+
+                        if client == Client.PERSONAL and appointment_datetime_start:
                             from personal.calendar_service import book_google_calendar_appointment
                             from dateutil import parser
 
                             try:
-                                dt = parser.parse(appointment_data["appointment_datetime_start"])
+                                dt = parser.parse(appointment_datetime_start)
                                 summary = f"AI Receptionist Appointment with {appointment_data.get('company', 'Unknown Company')}"
-                                description = f"Caller's Name: {appointment_data.get('first_name', '')} {appointment_data.get('last_name', '')}"
+                                description = f"Caller's Name: {callers_name} \n Phone: {phone_number}"
                                 book_google_calendar_appointment(dt, summary, description=description)
                             except Exception as e:
                                 logger.warning(f"Failed to book Google Calendar appointment: {e}")
+                        
+                        send_booking_notification(
+                            customer_name=callers_name,
+                            phone=phone_number,
+                            datetime=appointment_datetime_start,
+                            client=client,
+                            history=history
+                        )
+                        
                         break
 
                 finally:
