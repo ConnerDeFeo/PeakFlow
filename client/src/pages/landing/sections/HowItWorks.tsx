@@ -1,4 +1,31 @@
-import { NEON, STEPS } from '../../../constants'
+import { NEON } from '../../../constants/colors'
+const STEPS = [
+  {
+    num: '01',
+    title: 'Discovery Call',
+    desc: 'We start by taking a look at your business to define the best type of AI receptionist for your needs and goals.',
+  },
+  {
+    num: '02',
+    title: 'Custom Build',
+    desc: 'Our engineers build AI systems tailored to your exact business — no off-the-shelf templates.',
+  },
+  {
+    num: '03',
+    title: 'Launch & Integration',
+    desc: 'We deploy, test, and integrate with any existing software you use, ensuring a seamless transition and immediate impact.',
+  },
+  {
+    num: '04',
+    title: 'Optimise & Scale',
+    desc: 'We monitor performance and continuously fine-tune automations as your business grows.',
+  },
+  {
+    num: '05',
+    title: 'Ongoing Support',
+    desc: 'Our team is always on hand to provide support, updates, and new features as needed.',
+  }
+]
 
 export function HowItWorks() {
   return (

@@ -1,5 +1,5 @@
 import { Logo } from '../../../components/Logo'
-import { NEON, NEON_GLOW } from '../../../constants'
+import { NEON, NEON_GLOW } from '../../../constants/colors'
 
 export function ContactCTA() {
   return (
@@ -16,12 +16,11 @@ export function ContactCTA() {
             <Logo size={64} />
           </div>
           <h2 className="text-4xl md:text-5xl font-black mb-5">
-            Ready to Put Your<br />
-            <span style={{ color: NEON }}>Business on Autopilot?</span>
+            Ready to Get<br />
+            <span style={{ color: NEON }}>More Leads?</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-lg mx-auto mb-8 leading-relaxed">
-            Book a free 30-minute automation audit. We'll map out exactly which
-            processes to automate first and show you the expected ROI.
+            Book a 30-minute free consultation with our team.
           </p>
           <a
             href="mailto:hello@peakflow.ai"
@@ -31,7 +30,7 @@ export function ContactCTA() {
               boxShadow: `0 0 48px ${NEON_GLOW}`,
             }}
           >
-            Book Your Free Audit →
+            Book Your Free Consultation
           </a>
           <p className="text-gray-600 text-xs mt-4">
             No commitment. No credit card. Just results.

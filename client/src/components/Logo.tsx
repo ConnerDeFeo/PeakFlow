@@ -1,4 +1,4 @@
-import { NEON } from '../constants'
+import { NEON } from '../constants/colors'
 
 export function Logo({ size = 48 }: { size?: number }) {
   const h = Math.round(size * 0.87)

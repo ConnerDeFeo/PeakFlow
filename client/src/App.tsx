@@ -1,28 +1,20 @@
-import { Footer } from './components/Footer'
-import { ContactCTA } from './pages/landing/sections/ContactCTA'
-import { FAQ } from './pages/landing/sections/FAQ'
-import { Testimonials } from './pages/landing/sections/Testimonials'
-import { HowItWorks } from './pages/landing/sections/HowItWorks'
-import { Services } from './pages/landing/sections/Services'
-import { Hero } from './pages/landing/sections/Hero'
-import { NavBar } from './components/NavBar'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Landing from './pages/Landing/Landing';
+import { NavBar } from './components/NavBar';
+import { Footer } from './components/Footer';
+import Contact from './pages/Contact';
 
 function App() {
   return (
-    <div
-      className="bg-black text-white min-h-screen"
-      style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
-    >
+    <BrowserRouter>
       <NavBar/>
-      <Hero/>
-      <Services/>
-      <HowItWorks/>
-      <Testimonials/>
-      <FAQ/>
-      <ContactCTA />
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
       <Footer/>
-    </div>
-  )
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

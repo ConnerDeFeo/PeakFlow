@@ -1,5 +1,5 @@
 import { Logo } from '../../../components/Logo'
-import { NEON, NEON_GLOW } from '../../../constants'
+import { NEON, NEON_GLOW } from '../../../constants/colors'
 
 export function Hero() {
   return (
@@ -19,7 +19,7 @@ export function Hero() {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight mb-10">
-            A Receptionist <span style={{ color: NEON }}>That Never Sleeps.</span>
+            A Roofing Receptionist <span style={{ color: NEON }}>That Never Sleeps.</span>
           </h1>
 
           {/* Demo number — prominent, right below headline */}

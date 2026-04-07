@@ -1,5 +1,24 @@
 import { useState } from 'react'
-import { NEON, FAQS } from '../../../constants'
+import { NEON } from '../../../constants/colors'
+
+const FAQS = [
+  {
+    q: 'Do I need technical experience to use PeakFlow?',
+    a: 'Not at all. We handle all setup, configuration, and maintenance. Your team just uses the tools.',
+  },
+  {
+    q: 'How long does it take to set up?',
+    a: 'Most businesses are up and running within days. Complex automations may take a bit longer.',
+  },
+  {
+    q: 'Does PeakFlow integrate with my existing CRM?',
+    a: 'Yes. We integrate with all CRMs that have an open API, this includes all major platforms such as Salesforce, HubSpot, and JobNimbus.',
+  },
+  {
+    q: 'What if I want changes later?',
+    a: "All plans include ongoing support. We'll update and refine your receptionist whenever you need.",
+  },
+]
 
 export function FAQ() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -20,7 +39,7 @@ export function FAQ() {
             >
               <button
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full flex justify-between items-center px-6 py-5 text-left font-semibold text-sm hover:bg-gray-900 transition-colors"
+                className="cursor-pointer w-full flex justify-between items-center px-6 py-5 text-left font-semibold text-sm hover:bg-gray-900 transition-colors"
               >
                 <span>{faq.q}</span>
                 <span
