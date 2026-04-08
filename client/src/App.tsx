@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Landing from './pages/Landing/Landing';
 import { NavBar } from './components/NavBar';
 import { Footer } from './components/Footer';
 import Contact from './pages/Contact';
+import Landing from './pages/landing/landing';
 
 function App() {
   return (

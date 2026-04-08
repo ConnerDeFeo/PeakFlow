@@ -7,7 +7,6 @@ const Landing = () => {
   return (
     <div
       className="bg-black text-white min-h-screen"
-      style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
     >
       <Hero/>
       <HowItWorks/>

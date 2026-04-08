@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import { Logo } from '../../../components/Logo'
 import { NEON, NEON_GLOW } from '../../../constants/colors'
 
 export function ContactCTA() {
+  const navigate = useNavigate();
   return (
     <section id="contact" className="py-24 px-6 border-t border-gray-900">
       <div className="max-w-3xl mx-auto text-center">
@@ -20,7 +22,7 @@ export function ContactCTA() {
             <span style={{ color: NEON }}>More Leads?</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-lg mx-auto mb-8 leading-relaxed">
-            Book a 30-minute free consultation with our team.
+            Contact us to schedule a 30-minute consultation.
           </p>
           <a
             href="mailto:hello@peakflow.ai"
@@ -29,12 +31,10 @@ export function ContactCTA() {
               background: NEON,
               boxShadow: `0 0 48px ${NEON_GLOW}`,
             }}
+            onClick={() => navigate('/contact')}
           >
-            Book Your Free Consultation
+            Contact Us
           </a>
-          <p className="text-gray-600 text-xs mt-4">
-            No commitment. No credit card. Just results.
-          </p>
         </div>
       </div>
     </section>
