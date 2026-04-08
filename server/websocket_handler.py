@@ -41,7 +41,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
 
                 try:
                     appointment_data = dynamo.get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
-                    history.append({"role": "user", "content": user_text})
+                    history.append({"role": "user", "content": [{"text": user_text}]})
 
                     # Stream conversational response to Twilio
                     stream_response = stream_conversation(history, appointment_data, client, **kwargs)
@@ -68,7 +68,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
 
                     assistant_text = "".join(full_reply)
                     appointment_booked = APPOINTMENT_BOOKED_INDICATOR[client] in assistant_text
-                    history.append({"role": "assistant", "content": assistant_text})
+                    history.append({"role": "assistant", "content": [{"text": assistant_text}]})
 
                     # Save conversation history
                     dynamo.save_conversation(call_sid, history)
