@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 def test_calendar():
     now = datetime.now(ZoneInfo("America/New_York"))
     current_date = now.strftime("%A, %B %d, %Y %I:%M %p %Z")
-    tmr = now + timedelta(days=1)
-    one_week = now + timedelta(weeks=1, days=1)
+    tmr = (now + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
+    one_week = (now + timedelta(weeks=1, days=1)).replace(hour=21, minute=0, second=0, microsecond=0)
     available_time_slots = get_available_time_slots(tmr, one_week)
     return {"current_date": current_date, "available_time_slots": available_time_slots}
 
@@ -32,8 +32,8 @@ def incoming_call_route_personal():
 async def websocket_route_personal(websocket: WebSocket):
     now = datetime.now(ZoneInfo("America/New_York"))
     current_date = now.strftime("%A, %B %d, %Y %I:%M %p %Z")
-    tmr = now + timedelta(days=1)
-    one_week = now + timedelta(weeks=1, days=1)
+    tmr = (now + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
+    one_week = (now + timedelta(weeks=1, days=1)).replace(hour=21, minute=0, second=0, microsecond=0)
     available_time_slots = get_available_time_slots(tmr, one_week)
     await websocket_handler(websocket, Client.PERSONAL, current_date=current_date, available_time_slots=available_time_slots)
 
