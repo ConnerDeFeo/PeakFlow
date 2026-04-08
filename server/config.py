@@ -9,7 +9,7 @@ bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 ses = boto3.client('ses', region_name='us-east-2')
 
 SERVER_DOMAIN = "receptionist.connerdefeo.com"
-MAX_OUTPUT_TOKENS = 300
+MAX_OUTPUT_TOKENS = 1000
 CONVERSATION_MODEL = "openai.gpt-oss-120b-1:0"
 EXTRACTION_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
 INCOMING_CALL = "incoming-call"
