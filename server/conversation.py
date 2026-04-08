@@ -25,5 +25,8 @@ def stream_conversation(history: list, appointment_data: dict, client: Client, *
         modelId=CONVERSATION_MODEL,
         system=[{"text": get_conversation_prompt(CONVERSATION_TEMPLATES[client], appointment_data, APPOINTMENT_BOOKED_INDICATOR[client], **kwargs)}],
         messages=history,
-        inferenceConfig={"maxTokens": MAX_OUTPUT_TOKENS}
+        inferenceConfig={"maxTokens": MAX_OUTPUT_TOKENS},
+        additionalModelRequestFields={
+            "reasoning_effort": "high"
+        }
     )
