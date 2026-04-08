@@ -67,6 +67,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                     }))
 
                     assistant_text = "".join(full_reply)
+                    logger.debug(f"Full assistant reply: {assistant_text}")
                     appointment_booked = APPOINTMENT_BOOKED_INDICATOR[client] in assistant_text
                     history.append({"role": "assistant", "content": [{"text": assistant_text}]})
 
