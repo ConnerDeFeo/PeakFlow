@@ -10,15 +10,6 @@ from websocket_handler import websocket_handler
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-@router.get("/test-calendar")
-def test_calendar():
-    now = datetime.now(ZoneInfo("America/New_York"))
-    current_date = now.strftime("%A, %B %d, %Y %I:%M %p %Z")
-    tmr = (now + timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
-    one_week = (now + timedelta(weeks=1, days=1)).replace(hour=21, minute=0, second=0, microsecond=0)
-    available_time_slots = get_available_time_slots(tmr, one_week)
-    return {"current_date": current_date, "available_time_slots": available_time_slots}
-
 # Personal routes
 @router.post(f"/{Client.PERSONAL.value}/{INCOMING_CALL}")
 def incoming_call_route_personal():
