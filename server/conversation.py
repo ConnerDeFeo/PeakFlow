@@ -19,7 +19,7 @@ def get_conversation_prompt(template: str, current_data: dict, appointment_booke
     return template.format_map(variables)
 
 
-def stream_conversation_claude_haiku(history: list, appointment_data: dict, client: Client, **kwargs):
+def stream_conversation(history: list, appointment_data: dict, client: Client, **kwargs):
     """Returns a streaming response from Haiku."""
     return bedrock.converse_stream(
         modelId="us.anthropic.claude-haiku-4-5-20251001-v1:0",
