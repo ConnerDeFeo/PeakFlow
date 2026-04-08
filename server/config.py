@@ -68,7 +68,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         Information still needed:
         {missing}
 
-        The current date is:
+        IMPORTANT: THE CURRENT DATE IS:
         {current_date}
 
         Here are Conner's available time slots for the next week:
