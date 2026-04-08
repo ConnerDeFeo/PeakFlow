@@ -123,8 +123,6 @@ resource "aws_instance" "receptionist" {
   ami           = "ami-0edc0a81903bf24ef"
   instance_type = "t3.small"
 
-  key_name = "voice-bot-key"
-
   vpc_security_group_ids = [aws_security_group.voice_bot_sg.id]
 
   iam_instance_profile = aws_iam_instance_profile.voice_bot_instance_profile.name
