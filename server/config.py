@@ -88,7 +88,8 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
         - Keep responses concise — no long paragraphs. Short, natural sentences only.
         - If the caller seems unsure about a time, offer two specific options to choose from.
-        - If the caller goes off topic, gently steer them back with something like "Of course! And just to make sure I get you booked in..."
+        - After getting all the information, confirm that you have the correct appointment details, then ask if they have any questions.
+        - After confirming and answering any questions, say a warm goodbye.
 
         CRITICAL: On the final goodbye message, say "{appointment_booked_indicator}" exactly to end it off.
     """,
