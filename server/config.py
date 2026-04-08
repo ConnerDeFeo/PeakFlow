@@ -10,6 +10,7 @@ ses = boto3.client('ses', region_name='us-east-2')
 
 SERVER_DOMAIN = "receptionist.connerdefeo.com"
 MAX_OUTPUT_TOKENS = 300
+CONVERSATION_MODEL = "google.gemma-3-12b-it"
 EXTRACTION_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
 INCOMING_CALL = "incoming-call"
 WS = "ws"
