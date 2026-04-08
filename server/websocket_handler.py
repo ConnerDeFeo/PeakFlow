@@ -48,18 +48,17 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
 
                     full_reply = []
                     token_count = 0
-                    for bedrock_event in stream_response["body"]:
-                        chunk = json.loads(bedrock_event["chunk"]["bytes"])
-                        if chunk["type"] == "content_block_delta":
-                            token = chunk["delta"].get("text", "")
-                            if token:
-                                full_reply.append(token)
-                                token_count += 1
-                                await websocket.send_text(json.dumps({
-                                    "type": "text",
-                                    "token": token,
-                                    "last": False
-                                }))
+                    for bedrock_event in stream_response["stream"]:
+                        chunk = bedrock_event.get("contentBlockDelta", {})
+                        token = chunk.get("delta", {}).get("text", "")
+                        if token:
+                            full_reply.append(token)
+                            token_count += 1
+                            await websocket.send_text(json.dumps({
+                                "type": "text",
+                                "token": token,
+                                "last": False
+                            }))
 
                     await websocket.send_text(json.dumps({
                         "type": "text",
