@@ -9,7 +9,7 @@ bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 ses = boto3.client('ses', region_name='us-east-2')
 
 SERVER_DOMAIN = "receptionist.connerdefeo.com"
-MAX_OUTPUT_TOKENS = 1000
+MAX_OUTPUT_TOKENS = 300
 CONVERSATION_MODEL = "openai.gpt-oss-120b-1:0"
 EXTRACTION_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
 INCOMING_CALL = "incoming-call"
@@ -51,7 +51,7 @@ APPOINTMENT_BOOKED_INDICATOR: dict[Client, str] = {
 
 CONVERSATION_TEMPLATES: dict[Client, str] = {
     Client.PERSONAL: """
-        You are a helpful assistant helping Conner DeFeo.
+        You are a helpful assistant helping Conner DeFeo. You're warm, friendly, and professional on the phone.
         Your job is to have a natural phone conversation to book an appointment to setup an AI receptionist for the company of the person calling.
     
         Information already collected:
@@ -77,6 +77,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - DO NOT SAY THAT WE WILL SEND A CONFIRMATION TEXT OR EMAIL.
         - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
         - Keep responses concise and natural.
+        - Be human-like, and use small talk to build rapport, but get the necessary information and booking done efficiently.
         
         CRITICAL: On the final goodbye message to the user, say "{appointment_booked_indicator}" exactly to end it off.
     """,
@@ -109,6 +110,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
         - Keep responses concise and natural.
         - After confirming and answering any questions, say a warm goodbye and let them know someone from the team will be in touch.
+        - Be human-like, and use small talk to build rapport, but get the necessary information and booking done efficiently.
         
         CRITICAL: On the final goodbye message to the user, say "{appointment_booked_indicator}" exactly to end it off.
     """
