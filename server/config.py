@@ -10,7 +10,7 @@ ses = boto3.client('ses', region_name='us-east-2')
 
 SERVER_DOMAIN = "receptionist.connerdefeo.com"
 MAX_OUTPUT_TOKENS = 300
-CONVERSATION_MODEL = "google.gemma-3-27b-it"
+CONVERSATION_MODEL = "anthropic.claude-opus-4-6-v1"
 EXTRACTION_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
 INCOMING_CALL = "incoming-call"
 WS = "ws"
@@ -70,8 +70,8 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Speak naturally and conversationally, like a real receptionist on the phone.
         - Collect information in this order: first and last name, company name, 
         - Only ask one question at a time. Do not move on to the next question until you get a clear answer to the current one.
-        - Do not book on the current date
-        - Only book between 9am and 9pm
+        - Do not book on the current date.
+        - Only book between 9am and 9pm.
         - The call should be booked for around 30 minutes.
         - If there is no available slot for them over the next week, book it arbitrarily one week out and let them know that Conner will reach out.
         - DO NOT SAY THAT WE WILL SEND A CONFIRMATION TEXT OR EMAIL.
