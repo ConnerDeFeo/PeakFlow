@@ -20,13 +20,11 @@ def get_conversation_prompt(template: str, current_data: dict, appointment_booke
 
 # us.anthropic.claude-haiku-4-5-20251001-v1:0
 def stream_conversation(history: list, appointment_data: dict, client: Client, **kwargs):
-    """Returns a streaming response from Haiku."""
+    """Returns a streaming response from a given model."""
     return bedrock.converse_stream(
         modelId=CONVERSATION_MODEL,
         system=[{"text": get_conversation_prompt(CONVERSATION_TEMPLATES[client], appointment_data, APPOINTMENT_BOOKED_INDICATOR[client], **kwargs)}],
         messages=history,
         inferenceConfig={"maxTokens": MAX_OUTPUT_TOKENS},
-        additionalModelRequestFields={
-            "reasoning_effort": "medium"
-        }
+        performanceConfig={"latency": "optimized"}
     )
