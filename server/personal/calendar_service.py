@@ -23,14 +23,13 @@ def get_calendar_service():
     return build("calendar", "v3", credentials=creds)
 
 def get_available_time_slots(time_min, time_max):
-    """Return free 30-minute slots between 09:00–21:00 for each date in the range.
+    """Return free time blocks between 09:00–21:00 for each date in the range.
 
     Returns:
-        dict[str, list[dict]]: {"YYYY-MM-DD": [{"start": "HH:MM:SS", "end": "HH:MM:SS"}, ...]}
+        dict[str, list[dict]]: {"YYYY-MM-DD": [{"start": "9:00am", "end": "3:00pm"}, ...]}
     """
     service = get_calendar_service()
 
-    # Fetch events in the range; singleEvents=True expands recurring events into instances
     events_result = service.events().list(
         calendarId="primary",
         singleEvents=True,
@@ -39,8 +38,6 @@ def get_available_time_slots(time_min, time_max):
         timeMax=time_max.isoformat()
     ).execute()
 
-    # Group busy (start, end) time pairs by date.
-    # Events without a dateTime (i.e. all-day events) are skipped.
     taken = {}
     for event in events_result.get("items", []):
         start = event.get("start", {}).get("dateTime")
@@ -52,23 +49,42 @@ def get_available_time_slots(time_min, time_max):
         date = start_dt.date()
         taken.setdefault(date, []).append((start_dt.time(), end_dt.time()))
 
-    # For each date, walk 09:00–21:00 in 30-minute steps and keep
-    # any slot that doesn't overlap a busy block. Overlap condition:
-    # slot starts before the block ends AND slot ends after the block starts.
+    def to_12hr(t):
+        h, m = t.hour, t.minute
+        suffix = "am" if h < 12 else "pm"
+        h = h % 12 or 12
+        return f"{h}:{m:02d}{suffix}" if m else f"{h}{suffix}"
+
     avail = {}
     current_date = time_min.date()
     end_date = time_max.date()
+
     while current_date <= end_date:
-        busy = taken.get(current_date, [])
-        slots = []
+        busy = sorted(taken.get(current_date, []))
+        
+        # Build list of free 30-min slots first
+        free_slots = []
         current = datetime.combine(current_date, time(9, 0))
-        while current.time() <= time(21, 0):
+        while current.time() < time(21, 0):
             slot_start = current.time()
             slot_end = (current + timedelta(minutes=30)).time()
             if not any(slot_start < e and slot_end > s for s, e in busy):
-                slots.append({"start": str(slot_start), "end": str(slot_end)})
+                free_slots.append((slot_start, slot_end))
             current += timedelta(minutes=30)
-        avail[str(current_date)] = slots
+
+        # Merge consecutive slots into blocks
+        blocks = []
+        if free_slots:
+            block_start, block_end = free_slots[0]
+            for slot_start, slot_end in free_slots[1:]:
+                if slot_start == block_end:
+                    block_end = slot_end
+                else:
+                    blocks.append({"start": to_12hr(block_start), "end": to_12hr(block_end)})
+                    block_start, block_end = slot_start, slot_end
+            blocks.append({"start": to_12hr(block_start), "end": to_12hr(block_end)})
+
+        avail[str(current_date)] = blocks
         current_date += timedelta(days=1)
 
     return avail
