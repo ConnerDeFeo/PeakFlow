@@ -25,7 +25,10 @@ def stream_conversation(history: list, appointment_data: dict, client: Client, *
         modelId="us.anthropic.claude-haiku-4-5-20251001-v1:0",
         system=[{"text": get_conversation_prompt(CONVERSATION_TEMPLATES[client], appointment_data, APPOINTMENT_BOOKED_INDICATOR[client], **kwargs)}],
         messages=history,
-        inferenceConfig={"maxTokens": MAX_OUTPUT_TOKENS}
+        inferenceConfig={"maxTokens": MAX_OUTPUT_TOKENS},
+        additionalModelRequestFields={
+            "reasoning_effort": "low"
+        }
     )
 
 # def stream_conversation_gpt_oss_20b(history: list, appointment_data: dict, client: Client, **kwargs):
