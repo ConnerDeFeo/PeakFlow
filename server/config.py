@@ -84,7 +84,6 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Do not book on the current date.
         - Only book between 9am and 9pm.
         - The call should be booked for 30 minutes.
-        - If no available slot exists in the next week, book it one week out and let them know Conner will confirm.
         - Do not mention confirmation texts or emails.
         - Never use asterisks, bullet points, markdown, or special characters. This is a phone call.
         - Keep responses concise — no long paragraphs. Short, natural sentences only.
