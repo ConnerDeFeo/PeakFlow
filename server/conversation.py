@@ -27,6 +27,6 @@ def stream_conversation(history: list, appointment_data: dict, client: Client, *
         messages=history,
         inferenceConfig={"maxTokens": MAX_OUTPUT_TOKENS},
         additionalModelRequestFields={
-            "reasoning_effort": "high"
+            "reasoning_effort": "medium"
         }
     )
