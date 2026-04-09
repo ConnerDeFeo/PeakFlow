@@ -56,7 +56,7 @@ const Contact = () => {
         }}
       />
 
-      <div className="relative max-w-4xl mx-auto">
+      <div className="relative max-w-5xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-black leading-tight mb-4">
