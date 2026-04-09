@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { Logo } from '../../../components/Logo'
 import { NEON, NEON_GLOW } from '../../../constants/colors'
 
 export function ContactCTA() {
@@ -14,9 +13,6 @@ export function ContactCTA() {
             boxShadow: `inset 0 0 80px rgba(0,212,255,0.05)`,
           }}
         >
-          <div className="flex justify-center mb-6">
-            <Logo size={64} />
-          </div>
           <h2 className="text-4xl md:text-5xl font-black mb-5">
             Ready to Get<br />
             <span style={{ color: NEON }}>More Leads?</span>
