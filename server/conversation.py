@@ -1,6 +1,7 @@
 import json
 import logging
 from config import APPOINTMENT_BOOKED_INDICATOR, CONVERSATION_MODEL, CONVERSATION_TEMPLATES, MAX_OUTPUT_TOKENS, Client, bedrock
+from xai_sdk import Client as GrokClient
 
 logger = logging.getLogger(__name__)
 

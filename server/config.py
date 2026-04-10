@@ -1,12 +1,22 @@
 from typing import Any
 import boto3
 from enum import Enum
+from xai_sdk import Client as GrokClient
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
 dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
 twilio_conversations = dynamodb.Table("twilio_conversations")
 roofing_rochester_appointments = dynamodb.Table("roofing_rochester_appointments")
 personal_appointments = dynamodb.Table("personal_appointments")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 ses = boto3.client('ses', region_name='us-east-2')
+grok_client = GrokClient(
+    api_key=os.getenv("GROK_API_KEY"),
+    timeout=3600,
+)
+
 
 SERVER_DOMAIN = "receptionist.connerdefeo.com"
 MAX_OUTPUT_TOKENS = 200
