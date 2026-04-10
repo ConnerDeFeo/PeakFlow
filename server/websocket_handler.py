@@ -63,9 +63,9 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                     }))
 
                     grok_response = stream_response.sample()
-                    logger.info(f"THIS IS THE FULL REPLY: {grok_response}")
-                    assistant_text = grok_response.outputs[0]["message"]["content"]
-                    conversation_id = grok_response["id"]
+                    logger.info(f"FULL REPLY ATTRS: {dir(grok_response)}")
+                    assistant_text = grok_response.outputs[0].message.content
+                    conversation_id = grok_response.id
 
                     appointment_booked = APPOINTMENT_BOOKED_INDICATOR[client].lower() in assistant_text.lower()
                     history.append({"role": "assistant", "content": [{"text": assistant_text}]})
