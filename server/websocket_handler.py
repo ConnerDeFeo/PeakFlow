@@ -44,18 +44,19 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                     history.append({"role": "user", "content": [{"text": user_text}]})
 
                     # Stream conversational response to Twilio
-                    stream_response = stream_conversation(history, appointment_data, client, **kwargs)
+                    stream_response = stream_conversation(user_text, appointment_data, client, **kwargs)
 
-                    full_reply = []
                     for _, chunk in stream_response.stream():
                         token = chunk.content or ""
                         if token:
-                            full_reply.append(token)
                             await websocket.send_text(json.dumps({
                                 "type": "text",
                                 "token": token,
                                 "last": False
                             }))
+                    full_reply = stream_response.sample()
+                    print(full_reply)
+                    conversation_id = full_reply.id
 
                     await websocket.send_text(json.dumps({
                         "type": "text",
@@ -68,7 +69,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                     history.append({"role": "assistant", "content": [{"text": assistant_text}]})
 
                     # Save conversation history
-                    dynamo.save_conversation(call_sid, history)
+                    dynamo.save_conversation(call_sid, history, conversation_id, appointment_booked)
 
                     # Fire extraction in background
                     asyncio.create_task(run_extraction(

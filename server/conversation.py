@@ -21,14 +21,14 @@ def get_conversation_prompt(template: str, current_data: dict, appointment_booke
     return template.format_map(variables)
 
 # us.anthropic.claude-haiku-4-5-20251001-v1:0
-def stream_conversation(history: list, appointment_data: dict, client: Client, **kwargs):
+def stream_conversation(user_text, appointment_data: dict, client: Client, **kwargs):
     """Returns a streaming response from a given model."""
     grok_chat = grok_client.chat.create(
-        model="grok-4.20-non-reasoning",
+        model="grok-4.20-reasoning",
         store_messages=True
     )
     grok_chat.append(system(get_conversation_prompt(CONVERSATION_TEMPLATES[client], appointment_data, APPOINTMENT_BOOKED_INDICATOR[client], **kwargs)))
-    grok_chat.append(user(history[-1]["content"][0]["text"]))
+    grok_chat.append(user(user_text))
 
     return grok_chat
     

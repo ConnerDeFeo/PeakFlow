@@ -14,12 +14,13 @@ class DynamoDB():
         return resp.get("Item", {}).get("history", [])
 
 
-    def save_conversation(self, call_sid: str, history: list, appointment_booked: bool = False):
+    def save_conversation(self, call_sid: str, history: list, grok_id: str, appointment_booked: bool = False):
         twilio_conversations.put_item(Item={
             "call_sid": call_sid,
             "history": history,
             "appointment_booked": appointment_booked,
-            "expires_at": int(time.time()) + 3600
+            "expires_at": int(time.time()) + 3600,
+            "grok_id": grok_id
         })
 
     def get_appointment_data(self, phone_number: str, default: dict) -> dict:
