@@ -25,7 +25,7 @@ def stream_conversation(history: list, appointment_data: dict, client: Client, *
     """Returns a streaming response from a given model."""
     grok_chat = grok_client.chat.create(
         model="grok-4.20-non-reasoning",
-        timeout=3600,
+        store_messages=True
     )
     grok_chat.append(system(get_conversation_prompt(CONVERSATION_TEMPLATES[client], appointment_data, APPOINTMENT_BOOKED_INDICATOR[client], **kwargs)))
     grok_chat.append(history)

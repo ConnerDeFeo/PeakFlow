@@ -14,7 +14,7 @@ bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 ses = boto3.client('ses', region_name='us-east-2')
 grok_client = GrokClient(
     api_key=os.getenv("GROK_API_KEY"),
-    timeout=3600,
+    timeout=3600
 )
 
 
