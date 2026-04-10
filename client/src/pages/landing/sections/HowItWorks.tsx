@@ -43,7 +43,7 @@ export function HowItWorks() {
         {STEPS.map((step) => (
           <div
             key={step.num}
-            className="flex gap-6 items-start border border-gray-800 rounded-2xl p-8"
+            className="flex gap-4 md:gap-6 items-start border border-gray-800 rounded-2xl p-5 md:p-8"
             style={{ background: 'linear-gradient(135deg,#090909,#0d0d0d)' }}
           >
             <div

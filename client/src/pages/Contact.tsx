@@ -58,8 +58,8 @@ const Contact = () => {
 
       <div className="relative">
         {/* Heading */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-black leading-tight mb-4">
+        <div className="text-center mb-10 md:mb-16">
+          <h1 className="text-4xl md:text-6xl font-black leading-tight mb-4">
             Let's <span style={{ color: NEON }}>Talk.</span>
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
@@ -131,7 +131,7 @@ const Contact = () => {
 
         {/* Lead capture form */}
         <div
-          className="border border-gray-800 rounded-3xl px-8 md:px-14 py-14"
+          className="border border-gray-800 rounded-3xl px-5 md:px-14 py-10 md:py-14"
           style={{
             background: 'linear-gradient(135deg,#050505 0%,#091318 100%)',
             boxShadow: `inset 0 0 80px rgba(0,212,255,0.04)`,
