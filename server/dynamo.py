@@ -15,6 +15,7 @@ class DynamoDB():
 
 
     def save_conversation(self, call_sid: str, history: list, grok_id: str, appointment_booked: bool = False):
+        logger.info(f"SAVING CONVERSATION to DynamoDB: {call_sid} | Appointment Booked: {appointment_booked} | Grok ID: {grok_id}")
         twilio_conversations.put_item(Item={
             "call_sid": call_sid,
             "history": history,
