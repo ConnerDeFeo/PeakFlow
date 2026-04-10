@@ -5,13 +5,11 @@ import { ContactCTA } from "./sections/ContactCTA";
 
 const Landing = () => {
   return (
-    <div
-      className="bg-black text-white min-h-screen"
-    >
-      <Hero/>
-      <HowItWorks/>
-      <FAQ/>
-      <ContactCTA/>
+    <div className="text-white">
+        <Hero/>
+        <HowItWorks/>
+        <FAQ/>
+        <ContactCTA/>
     </div>
   )
 }

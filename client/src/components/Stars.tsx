@@ -1,4 +1,4 @@
-import { NEON } from '../constants/constants'
+import { NEON } from '../constants/colors'
 
 export function Stars() {
   return (

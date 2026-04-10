@@ -56,7 +56,7 @@ const Contact = () => {
         }}
       />
 
-      <div className="relative max-w-4xl mx-auto">
+      <div className="relative">
         {/* Heading */}
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-black leading-tight mb-4">
@@ -124,7 +124,7 @@ const Contact = () => {
               className="text-base font-semibold break-all group-hover:opacity-80 transition-opacity"
               style={{ color: NEON }}
             >
-              peakflowaiautomations@gmail.com
+              peakflowaiautomations<br />@gmail.com
             </span>
           </a>
         </div>
