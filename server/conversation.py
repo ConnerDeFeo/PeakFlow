@@ -28,7 +28,7 @@ def stream_conversation(history: list, appointment_data: dict, client: Client, *
         store_messages=True
     )
     grok_chat.append(system(get_conversation_prompt(CONVERSATION_TEMPLATES[client], appointment_data, APPOINTMENT_BOOKED_INDICATOR[client], **kwargs)))
-    grok_chat.append(history)
+    grok_chat.append(user(history[-1]["content"][0]["text"]))
 
     return grok_chat.stream()
     
