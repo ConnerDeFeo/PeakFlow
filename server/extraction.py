@@ -31,10 +31,40 @@ async def run_extraction(
     client: Client
 ):
     """Runs in background after each turn — extracts structured data and saves to DynamoDB."""
-    grok_chat = grok_client.chat.create(
-        model="grok-4.20-non-reasoning",
-    )
-    grok_chat.append(user(get_extraction_prompt(user_text, assistant_text, current_data, EXTRACTION_PROMPTS[client])))
 
-    for response, chunk in grok_chat.stream():
-        logger.info(f"Grok response chunk: {chunk}")
+    try:
+        grok_chat = grok_client.chat.create(
+            model="grok-4.20-non-reasoning",
+            timeout=3600,
+        )
+        grok_chat.append(user(get_extraction_prompt(user_text, assistant_text, current_data, EXTRACTION_PROMPTS[client])))
+
+        response = grok_chat.sample()
+
+        raw_body = json.loads(response.content.read())
+        raw_text = raw_body["content"][0]["text"].strip()
+
+        # Strip code fences if model ignores instructions
+        if raw_text.startswith("```"):
+            raw_text = raw_text.split("```")[1]
+            if raw_text.startswith("json"):
+                raw_text = raw_text[4:]
+            raw_text = raw_text.strip()
+
+        if not raw_text or raw_text == "{}":
+            return
+
+        extracted = json.loads(raw_text)
+        appointment_booked = extracted.pop("appointment_booked", False)
+        dynamo = DynamoDB(client)
+
+        if extracted:
+            updated_data = {**current_data, **extracted}
+            if phone_number:
+                dynamo.save_appointment_data(phone_number, updated_data)
+
+        if call_sid:
+            dynamo.save_conversation(call_sid, history, appointment_booked)
+
+    except Exception as e:
+        logger.error(f"Extraction failed: {e}")
