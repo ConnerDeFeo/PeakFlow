@@ -1,10 +1,10 @@
 terraform {
     backend "s3" {
-      bucket         = "ai-automation-tfstate"
+      bucket         = "peak-flow-ai-automation-tfstate"
       key            = "terraform.tfstate"
       region         = "us-east-2"
       use_lockfile   = true
       encrypt        = true
-      profile        = "default"
+      profile        = "peak_flow_admin"
     }
 }

@@ -1,6 +1,6 @@
 import time
 import logging
-from config import Client, twilio_conversations, TABLES
+from config import Client, TABLES
     
 
 logger = logging.getLogger(__name__)
@@ -8,19 +8,6 @@ logger = logging.getLogger(__name__)
 class DynamoDB():
     def __init__(self, client: Client):
         self.table = TABLES[client]
-    
-    def get_conversation_history(self, call_sid: str) -> list:
-        resp = twilio_conversations.get_item(Key={"call_sid": call_sid})
-        return resp.get("Item", {})
-
-
-    def save_conversation(self, call_sid: str, history: list, grok_id: str,):
-        twilio_conversations.put_item(Item={
-            "call_sid": call_sid,
-            "history": history,
-            "expires_at": int(time.time()) + 3600 * 24,  # 24 hours from now
-            "grok_id": grok_id
-        })
 
     def get_appointment_data(self, phone_number: str, default: dict) -> dict:
         resp = self.table.get_item(Key={"customer_phone_number": phone_number})

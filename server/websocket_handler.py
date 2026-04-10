@@ -32,9 +32,6 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
             if event == "setup":
                 call_sid = data.get("callSid")
                 phone_number = data.get("from")
-                conversation_history = dynamo.get_conversation_history(call_sid)
-                history = conversation_history.get("history", [])
-                grok_id = conversation_history.get("grok_id", None)
 
             elif event == "prompt":
                 user_text = data.get("voicePrompt", "").strip()
@@ -71,9 +68,6 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
 
                     appointment_booked = APPOINTMENT_BOOKED_INDICATOR[client].lower() in assistant_text.lower()
                     history.append({"role": "assistant", "content": [{"text": assistant_text}]})
-
-                    # Save conversation history
-                    dynamo.save_conversation(call_sid, history, grok_id)
 
                     # Fire extraction in background
                     asyncio.create_task(run_extraction(

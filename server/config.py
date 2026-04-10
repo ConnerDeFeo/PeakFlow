@@ -7,7 +7,6 @@ import os
 load_dotenv()
 
 dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
-twilio_conversations = dynamodb.Table("twilio_conversations")
 roofing_rochester_appointments = dynamodb.Table("roofing_rochester_appointments")
 personal_appointments = dynamodb.Table("personal_appointments")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
