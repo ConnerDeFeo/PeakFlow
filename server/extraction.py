@@ -33,10 +33,7 @@ async def run_extraction(
     """Runs in background after each turn — extracts structured data and saves to DynamoDB."""
 
     try:
-        grok_chat = grok_client.chat.create(
-            model="grok-4.20-non-reasoning",
-            timeout=3600,
-        )
+        grok_chat = grok_client.chat.create(model="grok-4.20-non-reasoning")
         grok_chat.append(user(get_extraction_prompt(user_text, assistant_text, current_data, EXTRACTION_PROMPTS[client])))
 
         response = grok_chat.sample()
