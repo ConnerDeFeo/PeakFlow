@@ -1,6 +1,7 @@
 import json
 import logging
 import asyncio
+from urllib import response
 from fastapi import APIRouter, WebSocket
 from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA, Client
 from dynamo import DynamoDB
@@ -54,9 +55,6 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                                 "token": token,
                                 "last": False
                             }))
-                    full_reply = stream_response.sample()
-                    logger.info(f"THIS IS THE FULL REPLY: {full_reply}")
-                    conversation_id = full_reply.id
 
                     await websocket.send_text(json.dumps({
                         "type": "text",
@@ -64,7 +62,11 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                         "last": True
                     }))
 
-                    assistant_text = "".join(full_reply)
+                    grok_response = stream_response.sample()
+                    logger.info(f"THIS IS THE FULL REPLY: {grok_response}")
+                    assistant_text = grok_response.outputs[0].message.content
+                    conversation_id = grok_response.id
+
                     appointment_booked = APPOINTMENT_BOOKED_INDICATOR[client].lower() in assistant_text.lower()
                     history.append({"role": "assistant", "content": [{"text": assistant_text}]})
 
