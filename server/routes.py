@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 # Personal routes
 @router.post(f"/{Client.PERSONAL.value}/{INCOMING_CALL}")
+logger.debug(f"Setting up incoming call route for {Client.PERSONAL.value}")
 def incoming_call_route_personal():
     return incoming_call(
         websocket_url=f"wss://{SERVER_DOMAIN}/{Client.PERSONAL.value}/{WS}",
