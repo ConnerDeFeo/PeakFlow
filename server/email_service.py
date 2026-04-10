@@ -9,8 +9,8 @@ def send_booking_notification(customer_name: str, phone: str, datetime:str, clie
         history_str += f"{role}: {content}\n\n"
 
     ses.send_email(
-        Source='peakflowaiautomatoins@gmail.com',
-        Destination={'ToAddresses': ['eakflowaiautomatoins@gmail.com']},
+        Source='peakflowaiautomations@gmail.com',
+        Destination={'ToAddresses': ['peakflowaiautomations@gmail.com']},
         Message={
             'Subject': {'Data': f'AI Receptionist booked an appointment: {customer_name}'},
             'Body': {
