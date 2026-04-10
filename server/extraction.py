@@ -40,9 +40,7 @@ async def run_extraction(
         grok_chat.append(user(get_extraction_prompt(user_text, assistant_text, current_data, EXTRACTION_PROMPTS[client])))
 
         response = grok_chat.sample()
-
-        raw_body = json.loads(response.content.read())
-        raw_text = raw_body["content"][0]["text"].strip()
+        raw_text = response.content
 
         # Strip code fences if model ignores instructions
         if raw_text.startswith("```"):
