@@ -100,11 +100,11 @@ def book_google_calendar_appointment(dt, summary, duration_minutes=30, descripti
         "colorId": "2",
         "start": {
             "dateTime": dt.isoformat(),
-            "timeZone": "UTC"
+            "timeZone": "America/New_York"
         },
         "end": {
             "dateTime": end_dt.isoformat(),
-            "timeZone": "UTC"
+            "timeZone": "America/New_York"
         }
     }
     
