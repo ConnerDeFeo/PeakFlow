@@ -47,6 +47,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                     appointment_data = dynamo.get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
                     history.append({"role": "user", "content": [{"text": user_text}]})
 
+                    logger.info(f"RECEIVED INPUT FOR GROK CONVERSATION: {grok_id}")
                     # Stream conversational response to Twilio
                     stream_response = stream_conversation(user_text, appointment_data, client, conversation_id=grok_id, **kwargs)
 
