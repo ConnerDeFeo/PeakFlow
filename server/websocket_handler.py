@@ -55,7 +55,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                                 "last": False
                             }))
                     full_reply = stream_response.sample()
-                    logger.info(full_reply)
+                    logger.info(f"THIS IS THE FULL REPLY: {full_reply}")
                     conversation_id = full_reply.id
 
                     await websocket.send_text(json.dumps({
