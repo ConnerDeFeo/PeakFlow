@@ -46,8 +46,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                 try:
                     appointment_data = dynamo.get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
                     history.append({"role": "user", "content": [{"text": user_text}]})
-
-                    logger.info(f"RECEIVED INPUT FOR GROK CONVERSATION: {grok_id}")
+                    
                     # Stream conversational response to Twilio
                     stream_response = stream_conversation(user_text, appointment_data, client, conversation_id=grok_id, **kwargs)
 
@@ -68,14 +67,13 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
 
                     grok_response = stream_response.sample()
                     assistant_text = grok_response.content
-                    conversation_id = grok_response.id
-                    logger.info(f"GROK CONVERSATION COMPLETE: {conversation_id} (Grok ID: {grok_id})")
+                    grok_id = grok_response.id
 
                     appointment_booked = APPOINTMENT_BOOKED_INDICATOR[client].lower() in assistant_text.lower()
                     history.append({"role": "assistant", "content": [{"text": assistant_text}]})
 
                     # Save conversation history
-                    dynamo.save_conversation(call_sid, history, conversation_id, appointment_booked)
+                    dynamo.save_conversation(call_sid, history, grok_id)
 
                     # Fire extraction in background
                     asyncio.create_task(run_extraction(
