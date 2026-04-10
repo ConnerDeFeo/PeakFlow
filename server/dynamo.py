@@ -11,7 +11,7 @@ class DynamoDB():
     
     def get_conversation_history(self, call_sid: str) -> list:
         resp = twilio_conversations.get_item(Key={"call_sid": call_sid})
-        return resp.get("Item", {}).get("history", [])
+        return resp.get("Item", {})
 
 
     def save_conversation(self, call_sid: str, history: list, grok_id: str, appointment_booked: bool = False):

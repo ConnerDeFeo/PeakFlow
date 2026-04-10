@@ -19,6 +19,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
     history = []
     is_processing = False
     dynamo = DynamoDB(client)
+    grok_id = None
 
     try:
         async for message in websocket.iter_text():
@@ -31,7 +32,9 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
             if event == "setup":
                 call_sid = data.get("callSid")
                 phone_number = data.get("from")
-                history = dynamo.get_conversation_history(call_sid)
+                conversation_history = dynamo.get_conversation_history(call_sid)
+                history = conversation_history.get("history", [])
+                grok_id = conversation_history.get("grok_id", None)
 
             elif event == "prompt":
                 user_text = data.get("voicePrompt", "").strip()
@@ -45,7 +48,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                     history.append({"role": "user", "content": [{"text": user_text}]})
 
                     # Stream conversational response to Twilio
-                    stream_response = stream_conversation(user_text, appointment_data, client, **kwargs)
+                    stream_response = stream_conversation(user_text, appointment_data, client, conversation_id=grok_id, **kwargs)
 
                     for _, chunk in stream_response.stream():
                         token = chunk.content or ""
