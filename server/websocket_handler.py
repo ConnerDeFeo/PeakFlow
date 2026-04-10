@@ -57,8 +57,15 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
 
                     full_reply = []
                     token_count = 0
-                    for response, chunk in stream_response:
-                        logger.info(f"Grok response chunk: {chunk}")
+                    for response, chunk in stream_response.stream():
+                        token = chunk.content or ""
+                        if token:
+                            full_reply.append(token)
+                            await websocket.send_text(json.dumps({
+                                "type": "text",
+                                "token": token,
+                                "last": False
+                            }))
 
                     await websocket.send_text(json.dumps({
                         "type": "text",
