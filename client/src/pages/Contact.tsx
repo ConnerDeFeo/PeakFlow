@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { NEON, NEON_GLOW } from '../constants/colors'
+import { DEMO_NUMBER } from '../constants/demo'
 
 const MISSED_CALLS_OPTIONS = [
   '0-2 calls',
@@ -88,7 +89,7 @@ const Contact = () => {
               className="text-2xl font-black tracking-tight group-hover:opacity-80 transition-opacity"
               style={{ color: NEON }}
             >
-              315-873-3743
+              {DEMO_NUMBER}
             </span>
           </a>
 
@@ -106,7 +107,7 @@ const Contact = () => {
               className="text-2xl font-black tracking-tight group-hover:opacity-80 transition-opacity"
               style={{ color: NEON }}
             >
-              315-879-7067
+              {DEMO_NUMBER}
             </span>
           </a>
 

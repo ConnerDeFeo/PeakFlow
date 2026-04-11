@@ -1,4 +1,5 @@
 import { NEON, NEON_GLOW } from '../../../constants/colors'
+import { DEMO_NUMBER } from '../../../constants/demo'
 
 export function Hero() {
   return (
@@ -28,7 +29,7 @@ export function Hero() {
               className="text-3xl md:text-5xl font-black tracking-tight transition-opacity group-hover:opacity-80"
               style={{ color: NEON, textShadow: `0 0 40px ${NEON_GLOW}` }}
             >
-              315-873-3743
+              {DEMO_NUMBER}
             </span>
           </a>
           <p className="text-lg px-6 md:px-0 md:text-xl text-gray-400 max-w-2xl mx-auto">
