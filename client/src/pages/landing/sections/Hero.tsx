@@ -31,7 +31,7 @@ export function Hero() {
               315-873-3743
             </span>
           </a>
-          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg px-6 md:px-0 md:text-xl text-gray-400 max-w-2xl mx-auto">
             PeakFlow's AI voice receptionist answers every call, qualifies every lead,
             and books appointments — 24/7, without you lifting a finger.
           </p>
