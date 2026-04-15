@@ -29,7 +29,7 @@ WS = "ws"
 class Client(Enum):
     PERSONAL = "personal"
     ROOFING_ROCHESTER = "roofing-rochester"
-    ADONIS_ROOFING = "adonis_roofing"   
+    ADONIS_ROOFING = "adonis-roofing"   
 
 TABLES: dict[Client, Any] = {
     Client.PERSONAL: personal_appointments,
