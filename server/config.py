@@ -9,7 +9,7 @@ load_dotenv()
 dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
 roofing_rochester_appointments = dynamodb.Table("roofing_rochester_appointments")
 personal_appointments = dynamodb.Table("personal_appointments")
-adonis_appointments = dynamodb.Table("adonis_roofing_appointments")
+ADONIS_ROOFING_appointments = dynamodb.Table("ADONIS_ROOFING_roofing_appointments")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 ses = boto3.client('ses', region_name='us-east-2')
 grok_client = GrokClient(
@@ -29,12 +29,12 @@ WS = "ws"
 class Client(Enum):
     PERSONAL = "personal"
     ROOFING_ROCHESTER = "roofing-rochester"
-    ADONIS = "adonis"   
+    ADONIS_ROOFING = "adonis_roofing"   
 
 TABLES: dict[Client, Any] = {
     Client.PERSONAL: personal_appointments,
     Client.ROOFING_ROCHESTER: roofing_rochester_appointments,
-    Client.ADONIS: adonis_appointments
+    Client.ADONIS_ROOFING: ADONIS_ROOFING_appointments
 }
 
 DEFAULT_APPOINTMENT_DATA: dict[Client, dict[str, None]] = {
@@ -54,7 +54,7 @@ DEFAULT_APPOINTMENT_DATA: dict[Client, dict[str, None]] = {
         "attic_access": None,
         "roof_age": None
     },
-    Client.ADONIS: {
+    Client.ADONIS_ROOFING: {
         "first_name": None,
         "last_name": None,
         "address": None,
@@ -69,7 +69,7 @@ DEFAULT_APPOINTMENT_DATA: dict[Client, dict[str, None]] = {
 APPOINTMENT_BOOKED_INDICATOR: dict[Client, str] = {
     Client.PERSONAL: "Thank you for booking an appointment, have a good rest of your day!",
     Client.ROOFING_ROCHESTER: "Thank you for choosing Roofing Rochester, we look forward to meeting you!",
-    Client.ADONIS: "Thank you for choosing Adonis Roofing, we look forward to meeting you!"
+    Client.ADONIS_ROOFING: "Thank you for choosing ADONIS_ROOFING Roofing, we look forward to meeting you!"
 }
 
 CONVERSATION_TEMPLATES: dict[Client, str] = {
@@ -152,9 +152,9 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         
         CRITICAL: On the final goodbye message to the user, say "{appointment_booked_indicator}" exactly to end it off.
     """,
-    Client.ADONIS: """
-        You are Ron, a friendly and professional assistant for Adonis Roofing. 
-        You are helping Adonis Roofing book appointments with potential clients.
+    Client.ADONIS_ROOFING: """
+        You are Ron, a friendly and professional assistant for ADONIS_ROOFING Roofing. 
+        You are helping ADONIS_ROOFING Roofing book appointments with potential clients.
         You are having a natural, warm phone conversation — not filling out a form.
 
         Tone: Friendly, conversational, and human. Like a real receptionist who genuinely enjoys talking to people.
@@ -263,7 +263,7 @@ EXTRACTION_PROMPTS: dict[Client, str] = {
 
         Return only a JSON object with newly extracted or corrected fields. If nothing new was mentioned, return {{}}.
     """,
-    Client.ADONIS: """
+    Client.ADONIS_ROOFING: """
         Extract any roofing appointment information from this conversation turn.
         Return ONLY a raw JSON object with fields that were clearly mentioned.
         Do not include fields that were not mentioned. Do not include null values.

@@ -43,4 +43,15 @@ async def websocket_route_roofing_rochester(websocket: WebSocket):
     await websocket_handler(websocket, Client.ROOFING_ROCHESTER)
 
 
-    
+# Adonis Roofing routes
+@router.post(f"/{Client.ADONIS_ROOFING.value}/{INCOMING_CALL}")
+def incoming_call_route_adonis_roofing():
+    return incoming_call(
+        websocket_url=f"wss://{SERVER_DOMAIN}/{Client.ADONIS_ROOFING.value}/{WS}",
+        welcome_greeting="Hi, this is Adonis Roofing, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
+        voice_name="gfRt6Z3Z8aTbpLfexQ7N"
+    )
+
+@router.websocket(f"/{Client.ADONIS_ROOFING.value}/{WS}")
+async def websocket_route_adonis_roofing(websocket: WebSocket):
+    await websocket_handler(websocket, Client.ADONIS_ROOFING)
