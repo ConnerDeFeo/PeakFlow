@@ -2,7 +2,8 @@
 locals {
   tables = toset([
     "personal_appointments",
-    "roofing_rochester_appointments"
+    "roofing_rochester_appointments",
+    "adonis_roofing_appointments"
   ])
 }
 
