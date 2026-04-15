@@ -69,7 +69,7 @@ DEFAULT_APPOINTMENT_DATA: dict[Client, dict[str, None]] = {
 APPOINTMENT_BOOKED_INDICATOR: dict[Client, str] = {
     Client.PERSONAL: "Thank you for booking an appointment, have a good rest of your day!",
     Client.ROOFING_ROCHESTER: "Thank you for choosing Roofing Rochester, we look forward to meeting you!",
-    Client.ADONIS_ROOFING: "Thank you for choosing ADONIS_ROOFING Roofing, we look forward to meeting you!"
+    Client.ADONIS_ROOFING: "Thank you for choosing Adonis Roofing, we look forward to meeting you!"
 }
 
 CONVERSATION_TEMPLATES: dict[Client, str] = {

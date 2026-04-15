@@ -82,7 +82,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
 
                     if appointment_booked:
                         word_count = len(assistant_text.split())
-                        speak_time = max(5, (word_count / 160) * 60)
+                        speak_time = max(5, (word_count / 150) * 60)
                         await asyncio.sleep(speak_time)
                         try:
                             await websocket.send_text(json.dumps({"type": "end"}))
