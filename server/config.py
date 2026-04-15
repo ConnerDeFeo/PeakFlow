@@ -9,7 +9,7 @@ load_dotenv()
 dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
 roofing_rochester_appointments = dynamodb.Table("roofing_rochester_appointments")
 personal_appointments = dynamodb.Table("personal_appointments")
-ADONIS_ROOFING_appointments = dynamodb.Table("ADONIS_ROOFING_roofing_appointments")
+ADONIS_ROOFING_appointments = dynamodb.Table("adonis_roofing_appointments")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 ses = boto3.client('ses', region_name='us-east-2')
 grok_client = GrokClient(
