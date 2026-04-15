@@ -49,7 +49,7 @@ def incoming_call_route_adonis_roofing():
     return incoming_call(
         websocket_url=f"wss://{SERVER_DOMAIN}/{Client.ADONIS_ROOFING.value}/{WS}",
         welcome_greeting="Hi, this is Adonis Roofing, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
-        voice_name="FUfBrNit0NNZAwb58KWH"
+        voice_name="rSZFtT0J8GtnLqoDoFAp"
     )
 
 @router.websocket(f"/{Client.ADONIS_ROOFING.value}/{WS}")
