@@ -1,0 +1,1 @@
+export const ownerEmail = "jackdefeo@peakflowaiautomations.com"
