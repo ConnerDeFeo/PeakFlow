@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { NEON, NEON_GLOW } from '../constants/colors'
-import { DEMO_NUMBER } from '../constants/demo'
+import { useState } from 'react';
+import { NEON, NEON_GLOW } from '../constants/colors';
+import { DEMO_NUMBER } from '../constants/demo';
+import { ownerEmail } from '../constants/email';
 
 const MISSED_CALLS_OPTIONS = [
   '0-2 calls',
@@ -113,7 +114,7 @@ const Contact = () => {
 
           {/* Email */}
           <a
-            href="mailto:peakflowaiautomations@gmail.com"
+            href={`mailto:${ownerEmail}`}
             className="group flex flex-col items-center text-center gap-3 border border-gray-800 rounded-2xl p-8 transition-colors hover:border-[#00d4ff]/40"
             style={{ background: 'linear-gradient(135deg,#050505,#091318)' }}
           >
@@ -125,7 +126,7 @@ const Contact = () => {
               className="text-base font-semibold break-all group-hover:opacity-80 transition-opacity"
               style={{ color: NEON }}
             >
-              peakflowaiautomations<br />@gmail.com
+              {ownerEmail}
             </span>
           </a>
         </div>

@@ -10,7 +10,7 @@ export function NavBar() {
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigation('/')}>
           <Logo/>
-          <span className="text-lg text-white">PeakFlow</span>
+          <span className="text-lg text-white">Peak Flow</span>
         </div>
         <Link to="/contact" className={`text-lg font-medium text-gray-300 transition-colors duration-200 hover:text-[${NEON}]`}>
           Contact
