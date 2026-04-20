@@ -49,7 +49,7 @@ def incoming_call_route_demo_appointments():
     return incoming_call(
         websocket_url=f"wss://{SERVER_DOMAIN}/{Client.DEMO_APPOINTMENTS.value}/{WS}",
         welcome_greeting="Hi, this is Aerial Exteriors, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
-        voice_name="rSZFtT0J8GtnLqoDoFAp"
+        voice_name="7EzWGsX10sAS4c9m9cPf"
     )
 
 @router.websocket(f"/{Client.DEMO_APPOINTMENTS.value}/{WS}")
