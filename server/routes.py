@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 # Personal routes
 @router.post(f"/{Client.PERSONAL.value}/{INCOMING_CALL}")
 def incoming_call_route_personal():
-    logger.debug(f"Setting up incoming call route for {Client.PERSONAL.value}")
     return incoming_call(
         websocket_url=f"wss://{SERVER_DOMAIN}/{Client.PERSONAL.value}/{WS}",
         welcome_greeting="Hello! I am an AI receptionist, how can I assist you today?",
