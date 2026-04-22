@@ -120,7 +120,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         - Speak naturally and conversationally, like a real receptionist on the phone.
         - Collect information in this order: first and last name, address, storm related/insurance claim or standard repair/replacement estimate, preferred appointment date, day, and time, (if replacement only) whether both partners can be present, attic access (yes/no/crawl space), roof age.
         - Do not book on the current date.
-        - Do not book on the following days: {days_closed}.
+        - You may book appointments on any of the following days: {days_open}.
         - Only book appointments between {start_time} and {end_time}.
         - For replacements, mention both partners naturally: "Since we go over systems, colors, and
         pricing options, it works best when both partners can be there. Is that something you can arrange?"
