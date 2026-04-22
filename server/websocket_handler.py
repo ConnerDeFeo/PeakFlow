@@ -1,7 +1,6 @@
 import json
 import logging
 import asyncio
-from urllib import response
 from fastapi import APIRouter, WebSocket
 from config import APPOINTMENT_BOOKED_INDICATOR, DEFAULT_APPOINTMENT_DATA, Client
 from dynamo import DynamoDB
