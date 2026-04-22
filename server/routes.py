@@ -29,29 +29,15 @@ async def websocket_route_personal(websocket: WebSocket):
     available_time_slots = get_available_time_slots(tmr, one_week)
     await websocket_handler(websocket, Client.PERSONAL, current_date=current_date, available_time_slots=available_time_slots)
 
-# Roofing Rochester routes
-@router.post(f"/{Client.ROOFING_ROCHESTER.value}/{INCOMING_CALL}")
-def incoming_call_route_roofing_rochester():
-    return incoming_call(
-        websocket_url=f"wss://{SERVER_DOMAIN}/{Client.ROOFING_ROCHESTER.value}/{WS}",
-        welcome_greeting="Hi, this is Roofing Rochester, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
-        voice_name="7EzWGsX10sAS4c9m9cPf"
-    )
-
-@router.websocket(f"/{Client.ROOFING_ROCHESTER.value}/{WS}")
-async def websocket_route_roofing_rochester(websocket: WebSocket):
-    await websocket_handler(websocket, Client.ROOFING_ROCHESTER)
-
-
 # Demo Appointments routes
-@router.post(f"/{Client.DEMO_APPOINTMENTS.value}/{INCOMING_CALL}")
+@router.post(f"/{Client.DEMO.value}/{INCOMING_CALL}")
 def incoming_call_route_demo_appointments():
     return incoming_call(
-        websocket_url=f"wss://{SERVER_DOMAIN}/{Client.DEMO_APPOINTMENTS.value}/{WS}",
+        websocket_url=f"wss://{SERVER_DOMAIN}/{Client.DEMO.value}/{WS}",
         welcome_greeting="Hi, this is Aerial Exteriors, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
         voice_name="7EzWGsX10sAS4c9m9cPf"
     )
 
-@router.websocket(f"/{Client.DEMO_APPOINTMENTS.value}/{WS}")
+@router.websocket(f"/{Client.DEMO.value}/{WS}")
 async def websocket_route_demo_appointments(websocket: WebSocket):
-    await websocket_handler(websocket, Client.DEMO_APPOINTMENTS)
+    await websocket_handler(websocket, Client.DEMO)
