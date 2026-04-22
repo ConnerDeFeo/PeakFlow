@@ -29,15 +29,15 @@ async def websocket_route_personal(websocket: WebSocket):
     await websocket_handler(websocket, Client.PERSONAL, current_date=current_date, available_time_slots=available_time_slots)
 
 # Demo Appointments routes
-@router.post(f"/{Client.DEMO.value}/{INCOMING_CALL}/{{company_name}}/{{owner_name}}/{{start_time}}/{{end_time}}/{{days_closed}}")
-def incoming_call_route_demo_appointments(company_name: str, owner_name: str, start_time: str, end_time: str, days_closed: str):
+@router.post(f"/{Client.DEMO.value}/{INCOMING_CALL}/{{company_name}}/{{owner_name}}/{{start_time}}/{{end_time}}/{{days_closed}}/{{founded_year}}")
+def incoming_call_route_demo_appointments(company_name: str, owner_name: str, start_time: str, end_time: str, days_closed: str, founded_year: str):
     formated_company_name = " ".join(company_name.split('_'))
     return incoming_call(
-        websocket_url=f"wss://{SERVER_DOMAIN}/{Client.DEMO.value}/{WS}/{company_name}/{owner_name}/{start_time}/{end_time}/{days_closed}",
+        websocket_url=f"wss://{SERVER_DOMAIN}/{Client.DEMO.value}/{WS}/{company_name}/{owner_name}/{start_time}/{end_time}/{days_closed}/{founded_year}",
         welcome_greeting=f"Hi, this is {formated_company_name}, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
         voice_name="7EzWGsX10sAS4c9m9cPf"
     )
 
-@router.websocket(f"/{Client.DEMO.value}/{WS}/{{company_name}}/{{owner_name}}/{{start_time}}/{{end_time}}/{{days_closed}}")
-async def websocket_route_demo_appointments(websocket: WebSocket, company_name: str, owner_name: str, start_time: str, end_time: str, days_closed: str):
-    await websocket_handler(websocket, Client.DEMO, company_name=" ".join(company_name.split('_')), owner_name=" ".join(owner_name.split('_')), start_time=start_time, end_time=end_time, days_closed=days_closed)
+@router.websocket(f"/{Client.DEMO.value}/{WS}/{{company_name}}/{{owner_name}}/{{start_time}}/{{end_time}}/{{days_closed}}/{{founded_year}}")
+async def websocket_route_demo_appointments(websocket: WebSocket, company_name: str, owner_name: str, start_time: str, end_time: str, days_closed: str, founded_year: str):
+    await websocket_handler(websocket, Client.DEMO, company_name=" ".join(company_name.split('_')), owner_name=" ".join(owner_name.split('_')), start_time=start_time, end_time=end_time, days_closed=days_closed, founded_year=founded_year)
