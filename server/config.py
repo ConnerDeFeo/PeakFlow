@@ -107,7 +107,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
         Always acknowledge what the caller says before moving to the next question.
 
         Your goal is to collect the following information through natural conversation:
-        First and last name, address, whether it's a repair or replacement, preferred appointment date and time, whether both partners can be present for replacements, attic access, and roof age.
+        First and last name, address,  whether it's storm-related/insurance claim or standard repair/replacement estimate, preferred appointment date and time, whether both partners can be present for replacements, attic access, and roof age.
 
         Information already collected:
         {collected}
@@ -117,9 +117,7 @@ CONVERSATION_TEMPLATES: dict[Client, str] = {
 
         Guidelines:
         - Speak naturally and conversationally, like a real receptionist on the phone.
-        - Collect information in this order: first and last name, address, repair or replacement estimate,
-        preferred appointment date, day, and time, (if replacement only) whether both partners can be present,
-        attic access (yes/no/crawl space), roof age.
+        - Collect information in this order: first and last name, address, storm related/insurance claim or standard repair/replacement estimate, preferred appointment date, day, and time, (if replacement only) whether both partners can be present, attic access (yes/no/crawl space), roof age.
         - Do not book on the current date.
         - Only book appointments between {start_time} and {end_time}.
         - For replacements, mention both partners naturally: "Since we go over systems, colors, and
