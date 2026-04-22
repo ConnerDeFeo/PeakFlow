@@ -2,10 +2,10 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import json
 import logging
-from config import EXTRACTION_PROMPTS, Client, bedrock
+from config import EXTRACTION_PROMPTS, Client
 from dynamo import DynamoDB
-from config import EXTRACTION_MODEL, grok_client
-from xai_sdk.chat import user, system
+from config import grok_client
+from xai_sdk.chat import user
 
     
 logger = logging.getLogger(__name__)
