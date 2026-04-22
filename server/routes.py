@@ -34,10 +34,10 @@ async def websocket_route_personal(websocket: WebSocket):
 def incoming_call_route_demo_appointments(company_name: str, owners_name: str, start_time: str, end_time: str):
     return incoming_call(
         websocket_url=f"wss://{SERVER_DOMAIN}/{Client.DEMO.value}/{WS}/{company_name}/{owners_name}/{start_time}/{end_time}",
-        welcome_greeting=f"Hi, this is {company_name}, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
+        welcome_greeting=f"Hi, this is {" ".join(company_name.split('_'))}, our receptionist is currently unavailable, I'm our AI assistant. How can I help you today?",
         voice_name="7EzWGsX10sAS4c9m9cPf"
     )
 
 @router.websocket(f"/{Client.DEMO.value}/{WS}/{{company_name}}/{{owners_name}}/{{start_time}}/{{end_time}}")
 async def websocket_route_demo_appointments(websocket: WebSocket, company_name: str, owners_name: str, start_time: str, end_time: str):
-    await websocket_handler(websocket, Client.DEMO, company_name=company_name, owners_name=owners_name, start_time=start_time, end_time=end_time)
+    await websocket_handler(websocket, Client.DEMO, company_name=" ".join(company_name.split('_')), owners_name=" ".join(owners_name.split('_')), start_time=start_time, end_time=end_time)
