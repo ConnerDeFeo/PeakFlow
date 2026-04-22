@@ -74,8 +74,6 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                         assistant_text=assistant_text,
                         current_data=appointment_data,
                         phone_number=phone_number,
-                        call_sid=call_sid,
-                        history=history,
                         client=client
                     ))
 

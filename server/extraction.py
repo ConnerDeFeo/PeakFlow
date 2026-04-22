@@ -26,8 +26,6 @@ async def run_extraction(
     assistant_text: str,
     current_data: dict,
     phone_number: str,
-    call_sid: str,
-    history: list,
     client: Client
 ):
     """Runs in background after each turn — extracts structured data and saves to DynamoDB."""
@@ -50,16 +48,12 @@ async def run_extraction(
             return
 
         extracted = json.loads(raw_text)
-        appointment_booked = extracted.pop("appointment_booked", False)
         dynamo = DynamoDB(client)
 
         if extracted:
             updated_data = {**current_data, **extracted}
             if phone_number:
                 dynamo.save_appointment_data(phone_number, updated_data)
-
-        if call_sid:
-            dynamo.save_conversation(call_sid, history, appointment_booked)
 
     except Exception as e:
         logger.error(f"Extraction failed: {e}")
