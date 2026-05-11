@@ -37,7 +37,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
 
 locals {
   lambdas = toset([
-    "contact_form_handler"
+    "contact_form_handler",
+    "auto_email_send"
   ])
 }
 
@@ -71,7 +72,7 @@ resource "aws_lambda_function_url" "lambda_url" {
 }
 
 resource "aws_apigatewayv2_api" "contact_api" {
-  name          = "contact-form-api"
+  name          = "peak-flow-api"
   protocol_type = "HTTP"
 
   cors_configuration {
