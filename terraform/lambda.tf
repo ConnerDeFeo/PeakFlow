@@ -38,12 +38,12 @@ resource "aws_iam_role_policy" "lambda_policy" {
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_file = "../lambda/contact_form_handler.py"
-  output_path = "../lambda/contact_form_handler.zip"
+  output_path = "../lambda/zips/contact_form_handler.zip"
 }
 
 # Lambda function
 resource "aws_lambda_function" "contact_form" {
-  filename         = "../lambda/contact_form_handler.zip"
+  filename         = "../lambda/zips/contact_form_handler.zip"
   function_name    = "contact-form-handler"
   role             = aws_iam_role.lambda_role.arn
   handler          = "contact_form_handler.lambda_handler"
