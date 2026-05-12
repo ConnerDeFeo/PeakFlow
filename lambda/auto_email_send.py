@@ -5,7 +5,6 @@ ses = boto3.client('ses', region_name='us-east-2')
 
 def lambda_handler(event, context):
     body = json.loads(event['body'])
-    to_address = body['toAddress']
     
     ses.send_email(
         Source='peakflowaiautomations@gmail.com',
