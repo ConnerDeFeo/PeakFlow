@@ -9,7 +9,7 @@ def lambda_handler(event, context):
     
     ses.send_email(
         Source='peakflowaiautomations@gmail.com',
-        Destination={'ToAddresses': [to_address]},
+        Destination={'ToAddresses': ['peakflowaiautomations@gmail.com']},
         Message={
             'Subject': {'Data': f"Test email"},
             'Body': {'Text': {'Data': f"""
