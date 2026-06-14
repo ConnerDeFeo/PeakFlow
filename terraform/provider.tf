@@ -11,5 +11,4 @@ terraform {
 
 provider "aws" {
   region = "us-east-2"
-  profile = "peak_flow_admin"
 }
