@@ -4,19 +4,14 @@ import json
 ses = boto3.client('ses', region_name='us-east-2')
 
 def lambda_handler(event, context):
-    body = json.loads(event['body'])
     
     ses.send_email(
-        Source='jackdefeo@peakflowaiautomations.com',
-        Destination={'ToAddresses': ['jackdefeo@peakflowaiautomations.com']},
+        Source='peakflowaiautomations@gmail.com',
+        Destination={'ToAddresses': ['peakflowaiautomations@gmail.com']},
         Message={
-            'Subject': {'Data': f"New Lead: {body.get('business', 'Unknown')}"},
+            'Subject': {'Data': f"Test email"},
             'Body': {'Text': {'Data': f"""
-Name: {body.get('name')}
-Business: {body.get('business')}
-Phone: {body.get('phone')}
-Email: {body.get('email')}
-Missed calls/week: {body.get('missed_calls')}
+                Testing this works
             """}}
         }
     )
