@@ -21,7 +21,7 @@ export function ContactCTA() {
             Contact us to schedule a 30-minute consultation.
           </p>
           <a
-            href="mailto:jackdefeo@peakflowaiautomations.com"
+            href="mailto:c.jack.defeo@gmail.com"
             className="inline-block px-10 py-5 rounded-full text-lg font-bold text-black transition-opacity hover:opacity-90"
             style={{
               background: NEON,

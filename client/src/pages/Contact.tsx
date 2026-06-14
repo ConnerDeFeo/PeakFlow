@@ -70,30 +70,7 @@ const Contact = () => {
         </div>
 
         {/* Contact cards */}
-        <div className="grid md:grid-cols-3 gap-4 mb-16">
-          {/* Demo line */}
-          <a
-            href="tel:3158733743"
-            className="group flex flex-col items-center text-center gap-3 border border-gray-800 rounded-2xl p-8 transition-colors hover:border-[#00d4ff]/40"
-            style={{ background: 'linear-gradient(135deg,#050505,#091318)' }}
-          >
-            <span
-              className="text-3xl font-black"
-              style={{ color: NEON, textShadow: `0 0 32px ${NEON_GLOW}` }}
-            >
-              AI Demo
-            </span>
-            <span className="text-xs font-semibold uppercase tracking-widest text-gray-500">
-              Call to set up an appointment
-            </span>
-            <span
-              className="text-2xl font-black tracking-tight group-hover:opacity-80 transition-opacity"
-              style={{ color: NEON }}
-            >
-              {DEMO_NUMBER}
-            </span>
-          </a>
-
+        <div className="grid md:grid-cols-2 gap-4 mb-16">
           {/* Direct phone */}
           <a
             href="tel:3158797067"

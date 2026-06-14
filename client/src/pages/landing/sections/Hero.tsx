@@ -1,5 +1,4 @@
-import { NEON, NEON_GLOW } from '../../../constants/colors'
-import { DEMO_NUMBER } from '../../../constants/demo'
+import { NEON } from '../../../constants/colors'
 
 export function Hero() {
   return (
@@ -17,21 +16,6 @@ export function Hero() {
             A Roofing Receptionist <br/><span style={{ color: NEON }}>That Never Sleeps.</span>
           </h1>
 
-          {/* Demo number — prominent, right below headline */}
-          <a
-            href="tel:3158733743"
-            className="group inline-flex flex-col items-center gap-1 mb-6 md:mb-10"
-          >
-            <span className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-1">
-              Hear our AI receptionist — call right now
-            </span>
-            <span
-              className="text-3xl md:text-5xl font-black tracking-tight transition-opacity group-hover:opacity-80"
-              style={{ color: NEON, textShadow: `0 0 40px ${NEON_GLOW}` }}
-            >
-              {DEMO_NUMBER}
-            </span>
-          </a>
           <p className="text-lg px-6 md:px-0 md:text-xl text-gray-400 max-w-2xl mx-auto">
             PeakFlow's AI voice receptionist answers every call, qualifies every lead,
             and books appointments — 24/7, without you lifting a finger.
