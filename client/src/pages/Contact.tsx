@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { NEON, NEON_GLOW } from '../constants/colors';
-import { DEMO_NUMBER } from '../constants/demo';
 import { ownerEmail } from '../constants/email';
 
 const MISSED_CALLS_OPTIONS = [
