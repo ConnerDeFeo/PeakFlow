@@ -2,7 +2,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import json
 import logging
-from config import EXTRACTION_PROMPTS, Client
+from config import CONVERSATION_MODEL, EXTRACTION_PROMPTS, Client, bedrock
 from dynamo import DynamoDB
 
     
@@ -29,11 +29,14 @@ async def run_extraction(
     """Runs in background after each turn — extracts structured data and saves to DynamoDB."""
 
     try:
-        grok_chat = grok_client.chat.create(model="grok-4.20-non-reasoning")
-        grok_chat.append(user(get_extraction_prompt(user_text, assistant_text, current_data, EXTRACTION_PROMPTS[client])))
+        prompt = get_extraction_prompt(user_text, assistant_text, current_data, EXTRACTION_PROMPTS[client])
 
-        response = grok_chat.sample()
-        raw_text = response.content
+        response = bedrock.converse(
+            modelId=CONVERSATION_MODEL,
+            messages=[{"role": "user", "content": [{"text": prompt}]}],
+            inferenceConfig={"maxTokens": 512},
+        )
+        raw_text = response["output"]["message"]["content"][0]["text"].strip()
 
         # Strip code fences if model ignores instructions
         if raw_text.startswith("```"):
