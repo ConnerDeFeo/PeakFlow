@@ -11,7 +11,7 @@ ses = boto3.client('ses', region_name='us-east-2')
 
 SERVER_DOMAIN = "server.connerdefeo.com"
 MAX_OUTPUT_TOKENS = 200
-CONVERSATION_MODEL = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"  # Claude Sonnet on AWS Bedrock (cross-region inference profile)
+CONVERSATION_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0"  # Claude Sonnet on AWS Bedrock (cross-region inference profile)
 INCOMING_CALL = "incoming-call"
 WS = "ws"
 
