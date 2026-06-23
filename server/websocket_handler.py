@@ -18,7 +18,6 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
     history = []
     is_processing = False
     dynamo = DynamoDB(client)
-    grok_id = None
 
     try:
         async for message in websocket.iter_text():
@@ -40,15 +39,22 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                 is_processing = True
 
                 try:
-                    appointment_data = dynamo.get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
                     history.append({"role": "user", "content": [{"text": user_text}]})
-                    
-                    # Stream conversational response to Twilio
-                    stream_response = stream_conversation(user_text, appointment_data, client, conversation_id=grok_id, **kwargs)
 
-                    for _, chunk in stream_response.stream():
-                        token = chunk.content or ""
+                    # Personal is a basic conversational demo — no appointment data.
+                    if client == Client.PERSONAL:
+                        appointment_data = {}
+                    else:
+                        appointment_data = dynamo.get_appointment_data(phone_number, DEFAULT_APPOINTMENT_DATA[client])
+
+                    # Stream conversational response (Claude Sonnet on Bedrock) to Twilio
+                    stream = stream_conversation(history, appointment_data, client, **kwargs)
+
+                    assistant_text = ""
+                    for chunk in stream:
+                        token = chunk.get("contentBlockDelta", {}).get("delta", {}).get("text", "")
                         if token:
+                            assistant_text += token
                             await websocket.send_text(json.dumps({
                                 "type": "text",
                                 "token": token,
@@ -61,12 +67,13 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                         "last": True
                     }))
 
-                    grok_response = stream_response.sample()
-                    assistant_text = grok_response.content
-                    grok_id = grok_response.id
+                    history.append({"role": "assistant", "content": [{"text": assistant_text}]})
+
+                    # Personal demo just talks back and forth — skip booking/extraction.
+                    if client == Client.PERSONAL:
+                        continue
 
                     appointment_booked = APPOINTMENT_BOOKED_INDICATOR[client].lower() in assistant_text.lower()
-                    history.append({"role": "assistant", "content": [{"text": assistant_text}]})
 
                     # Fire extraction in background
                     asyncio.create_task(run_extraction(
@@ -86,21 +93,9 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                         except:
                             logger.warning("Failed to send 'end' message over WebSocket (likely already closed)")
 
-                        appointment_datetime_start = appointment_data.get("appointment_datetime_start") 
+                        appointment_datetime_start = appointment_data.get("appointment_datetime_start")
                         callers_name = f"{appointment_data.get('first_name', '')} {appointment_data.get('last_name', '')}".strip()
 
-                        if client == Client.PERSONAL and appointment_datetime_start:
-                            from personal.calendar_service import book_google_calendar_appointment
-                            from dateutil import parser
-
-                            try:
-                                dt = parser.parse(appointment_datetime_start)
-                                summary = f"AI Receptionist Appointment with {appointment_data.get('company', 'Unknown Company')}"
-                                description = f"Caller's Name: {callers_name} \n Phone: {phone_number}"
-                                book_google_calendar_appointment(dt, summary, description=description)
-                            except Exception as e:
-                                logger.warning(f"Failed to book Google Calendar appointment: {e}")
-                        
                         send_booking_notification(
                             customer_name=callers_name,
                             phone=phone_number,
@@ -108,7 +103,7 @@ async def websocket_handler(websocket: WebSocket, client: Client, **kwargs):
                             client=client,
                             history=history
                         )
-                        
+
                         break
 
                 finally:

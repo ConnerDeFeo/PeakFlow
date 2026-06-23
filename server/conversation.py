@@ -1,8 +1,6 @@
 import json
 import logging
 from config import APPOINTMENT_BOOKED_INDICATOR, CONVERSATION_MODEL, CONVERSATION_TEMPLATES, MAX_OUTPUT_TOKENS, Client, bedrock
-from config import grok_client
-from xai_sdk.chat import user, system
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +8,7 @@ logger = logging.getLogger(__name__)
 def get_conversation_prompt(template: str, current_data: dict, appointment_booked_indicator: str, **kwargs) -> str:
     collected = {k: v for k, v in current_data.items() if v is not None}
     missing = [k for k, v in current_data.items() if v is None]
-   
+
     variables = {
         "collected": json.dumps(collected, indent=2),
         "missing": missing,
@@ -20,17 +18,23 @@ def get_conversation_prompt(template: str, current_data: dict, appointment_booke
 
     return template.format_map(variables)
 
-# us.anthropic.claude-haiku-4-5-20251001-v1:0
-def stream_conversation(user_text: str, appointment_data: dict, client: Client, conversation_id: str = None, **kwargs):
-    """Returns a streaming response from a given model."""
-    grok_chat = grok_client.chat.create(
-        model="grok-4.20-non-reasoning",
-        store_messages=True,
-        previous_response_id=conversation_id
-    )
-    if conversation_id is None:
-        grok_chat.append(system(get_conversation_prompt(CONVERSATION_TEMPLATES[client], appointment_data, APPOINTMENT_BOOKED_INDICATOR[client], **kwargs)))
-    grok_chat.append(user(user_text))
 
-    return grok_chat
-    
+def stream_conversation(history: list, appointment_data: dict, client: Client, **kwargs):
+    """Stream a conversational response from Claude Sonnet on AWS Bedrock.
+
+    Returns the Bedrock converse_stream event iterator. `history` is the full
+    conversation in Bedrock Converse format and must already include the latest
+    user turn.
+    """
+    system_prompt = get_conversation_prompt(
+        CONVERSATION_TEMPLATES[client], appointment_data, APPOINTMENT_BOOKED_INDICATOR[client], **kwargs
+    )
+
+    response = bedrock.converse_stream(
+        modelId=CONVERSATION_MODEL,
+        messages=history,
+        system=[{"text": system_prompt}],
+        inferenceConfig={"maxTokens": MAX_OUTPUT_TOKENS},
+    )
+
+    return response["stream"]
