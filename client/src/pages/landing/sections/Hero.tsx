@@ -22,7 +22,6 @@ export function Hero() {
             <a
               href={`tel:${DEMO_NUMBER.replace(/[^0-9]/g, '')}`}
               className="inline-block text-4xl sm:text-5xl md:text-7xl font-black tracking-tight transition-opacity hover:opacity-80"
-              style={{ color: NEON }}
             >
               {DEMO_NUMBER}
             </a>
