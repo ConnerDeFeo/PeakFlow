@@ -5,7 +5,7 @@ import { ContactCTA } from "./sections/ContactCTA";
 
 const Landing = () => {
   return (
-    <div className="text-white">
+    <div className="text-black">
         <Hero/>
         <HowItWorks/>
         <FAQ/>

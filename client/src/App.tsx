@@ -6,7 +6,7 @@ import Landing from './pages/landing/Landing';
 
 function App() {
   return (
-    <div className='bg-black'>
+    <div className='bg-white'>
       <BrowserRouter>
         <NavBar/>
           <div className='max-w-4xl mx-auto'>

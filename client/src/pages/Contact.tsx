@@ -48,7 +48,7 @@ const Contact = () => {
   }
 
   return (
-    <div className="bg-black text-white min-h-screen pt-28 pb-24 px-6">
+    <div className="bg-white text-black min-h-screen pt-28 pb-24 px-6">
       {/* Background glow */}
       <div
         className="fixed inset-0 pointer-events-none"
@@ -64,7 +64,7 @@ const Contact = () => {
           <h1 className="text-4xl md:text-6xl font-black leading-tight mb-4">
             Let's <span style={{ color: NEON }}>Talk.</span>
           </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Call our AI receptionist to set up an appointment, or reach us directly below.
           </p>
         </div>
@@ -74,10 +74,10 @@ const Contact = () => {
           {/* Direct phone */}
           <a
             href="tel:3158797067"
-            className="group flex flex-col items-center text-center gap-3 border border-gray-800 rounded-2xl p-8 transition-colors hover:border-[#00d4ff]/40"
-            style={{ background: 'linear-gradient(135deg,#050505,#091318)' }}
+            className="group flex flex-col items-center text-center gap-3 border border-gray-200 rounded-2xl p-8 transition-colors hover:border-[#00d4ff]/40"
+            style={{ background: 'linear-gradient(135deg,#ffffff,#eef9fc)' }}
           >
-            <span className="text-3xl font-black text-white">Direct Line</span>
+            <span className="text-3xl font-black text-black">Direct Line</span>
             <span className="text-xs font-semibold uppercase tracking-widest text-gray-500">
               Call us directly
             </span>
@@ -85,17 +85,17 @@ const Contact = () => {
               className="text-2xl font-black tracking-tight group-hover:opacity-80 transition-opacity"
               style={{ color: NEON }}
             >
-              {DEMO_NUMBER}
+              315-879-7067
             </span>
           </a>
 
           {/* Email */}
           <a
             href={`mailto:${ownerEmail}`}
-            className="group flex flex-col items-center text-center gap-3 border border-gray-800 rounded-2xl p-8 transition-colors hover:border-[#00d4ff]/40"
-            style={{ background: 'linear-gradient(135deg,#050505,#091318)' }}
+            className="group flex flex-col items-center text-center gap-3 border border-gray-200 rounded-2xl p-8 transition-colors hover:border-[#00d4ff]/40"
+            style={{ background: 'linear-gradient(135deg,#ffffff,#eef9fc)' }}
           >
-            <span className="text-3xl font-black text-white">Email</span>
+            <span className="text-3xl font-black text-black">Email</span>
             <span className="text-xs font-semibold uppercase tracking-widest text-gray-500">
               Send us a message
             </span>
@@ -110,16 +110,16 @@ const Contact = () => {
 
         {/* Lead capture form */}
         <div
-          className="border border-gray-800 rounded-3xl px-5 md:px-14 py-10 md:py-14"
+          className="border border-gray-200 rounded-3xl px-5 md:px-14 py-10 md:py-14"
           style={{
-            background: 'linear-gradient(135deg,#050505 0%,#091318 100%)',
-            boxShadow: `inset 0 0 80px rgba(0,212,255,0.04)`,
+            background: 'linear-gradient(135deg,#ffffff 0%,#eef9fc 100%)',
+            boxShadow: `inset 0 0 80px rgba(0,212,255,0.06)`,
           }}
         >
           <h2 className="text-3xl md:text-4xl font-black mb-2 text-center">
             Get a <span style={{ color: NEON }}>Free Consultation</span>
           </h2>
-          <p className="text-gray-400 text-center mb-10">
+          <p className="text-gray-600 text-center mb-10">
             Fill out the form and we'll reach out within one business day.
           </p>
 
@@ -131,7 +131,7 @@ const Contact = () => {
               >
                 You're all set!
               </p>
-              <p className="text-gray-400">We'll be in touch soon.</p>
+              <p className="text-gray-600">We'll be in touch soon.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -147,7 +147,7 @@ const Contact = () => {
                     value={form.name}
                     onChange={handleChange}
                     placeholder="John Smith"
-                    className="bg-black/60 border border-gray-800 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#00d4ff] transition-colors"
+                    className="bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 text-black placeholder-gray-400 focus:outline-none focus:border-[#00d4ff] transition-colors"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -161,7 +161,7 @@ const Contact = () => {
                     value={form.business_name}
                     onChange={handleChange}
                     placeholder="Smith Roofing LLC"
-                    className="bg-black/60 border border-gray-800 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#00d4ff] transition-colors"
+                    className="bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 text-black placeholder-gray-400 focus:outline-none focus:border-[#00d4ff] transition-colors"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -175,7 +175,7 @@ const Contact = () => {
                     value={form.phone}
                     onChange={handleChange}
                     placeholder="000-000-0000"
-                    className="bg-black/60 border border-gray-800 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#00d4ff] transition-colors"
+                    className="bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 text-black placeholder-gray-400 focus:outline-none focus:border-[#00d4ff] transition-colors"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -189,7 +189,7 @@ const Contact = () => {
                     value={form.email}
                     onChange={handleChange}
                     placeholder="john@smithroofing.com"
-                    className="bg-black/60 border border-gray-800 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#00d4ff] transition-colors"
+                    className="bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 text-black placeholder-gray-400 focus:outline-none focus:border-[#00d4ff] transition-colors"
                   />
                 </div>
               </div>
@@ -203,8 +203,8 @@ const Contact = () => {
                   required
                   value={form.missed_calls}
                   onChange={handleChange}
-                  className="bg-black/60 border border-gray-800 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-[#00d4ff] transition-colors appearance-none cursor-pointer"
-                  style={{ colorScheme: 'dark' }}
+                  className="bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 text-black focus:outline-none focus:border-[#00d4ff] transition-colors appearance-none cursor-pointer"
+                  style={{ colorScheme: 'light' }}
                 >
                   <option value="" disabled>Select an estimate…</option>
                   {MISSED_CALLS_OPTIONS.map((opt) => (
