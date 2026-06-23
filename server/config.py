@@ -1,20 +1,12 @@
 from typing import Any
 import boto3
 from enum import Enum
-from xai_sdk import Client as GrokClient
-from dotenv import load_dotenv
-import os
-load_dotenv()
 
 dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
 personal_appointments = dynamodb.Table("personal_appointments")
 demo_roofing_appointments = dynamodb.Table("demo_roofing_appointments")
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-2")
 ses = boto3.client('ses', region_name='us-east-2')
-grok_client = GrokClient(
-    api_key=os.getenv("GROK_API_KEY"),
-    timeout=3600
-)
 
 
 SERVER_DOMAIN = "server.peakflowaiautomations.com"

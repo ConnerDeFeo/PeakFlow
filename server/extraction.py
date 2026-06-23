@@ -4,8 +4,6 @@ import json
 import logging
 from config import EXTRACTION_PROMPTS, Client
 from dynamo import DynamoDB
-from config import grok_client
-from xai_sdk.chat import user
 
     
 logger = logging.getLogger(__name__)
