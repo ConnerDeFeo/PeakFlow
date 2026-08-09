@@ -192,7 +192,3 @@ Honest state of the project — it's a working product, not a hardened one.
 - **Demo-grade access controls.** SSH is open to `0.0.0.0/0` and the Lambda function URLs are unauthenticated. Both need locking down before this carries real customer volume.
 - **Extraction failures are logged and swallowed.** A dropped extraction silently loses a field for that turn; it needs a retry with backoff and a dead-letter path.
 - **Calendar write-back is unbuilt.** Google API client libraries are already in `requirements.txt` for it — bookings currently land in DynamoDB and an email, not directly on the owner's calendar.
-
----
-
-Built by [Conner DeFeo](https://github.com/ConnerDeFeo).
