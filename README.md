@@ -11,12 +11,6 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript&logoColor=white)
 
-### 📞 Try it live: **[315-556-8316](tel:3155568316)**
-
-Call the number and you'll be talking to the system in this repository. It will greet you as the receptionist for a roofing company, ask for your name and address, work out whether you need a repair or a replacement, negotiate a date and time inside the business's hours, and confirm the booking — then email the transcript and the structured appointment record to the business owner.
-
-Backend live at `server.connerdefeo.com` · deployed on AWS · built solo.
-
 ---
 
 ## What it does
