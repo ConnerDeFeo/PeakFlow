@@ -1,1 +1,0 @@
-export const DEMO_NUMBER = '315-556-8316';
